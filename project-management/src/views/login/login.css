@@ -1,0 +1,42 @@
+.login-card {
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: 12px 12px 22px grey;
+}
+
+.login-container {
+  height: 100vh;
+  background-color: rgb(202, 212, 212);
+}
+
+.login__image {
+  display: none;
+}
+
+.btn1 {
+  border: none;
+  outline: none;
+  height: 50px;
+  width: 100%;
+  background-color: black;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+
+}
+
+.btn1:hover {
+  background-color: white;
+  border: 1px solid;
+  color: black;
+}
+
+@media (min-width: 992px){
+
+
+  .login__image {
+    display: block;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+  }
+}
