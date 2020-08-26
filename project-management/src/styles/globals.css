@@ -1,0 +1,15 @@
+:root {
+  --light-sky: rgb(202, 212, 212);
+
+  --background-primary: var(--light-sky);
+  --background-secondary: white;
+  --text-primary: black;
+}
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+

@@ -1,12 +1,12 @@
 .login-card {
-  background-color: white;
+  background-color: var(--background-secondary);
   border-radius: 30px;
   box-shadow: 12px 12px 22px grey;
 }
 
 .login-container {
   height: 100vh;
-  background-color: rgb(202, 212, 212);
+  background-color: var(--background-primary);
 }
 
 .login__image {
@@ -18,17 +18,17 @@
   outline: none;
   height: 50px;
   width: 100%;
-  background-color: black;
-  color: white;
+  background-color: var(--text-primary);
+  color: var(--background-secondary);
   border-radius: 4px;
   font-weight: bold;
 
 }
 
 .btn1:hover {
-  background-color: white;
+  background-color: var(--background-secondary);
   border: 1px solid;
-  color: black;
+  color: var(--text-primary);
 }
 
 @media (min-width: 992px){

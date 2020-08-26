@@ -10,11 +10,7 @@ function Login() {
         <div className="container">
           <div className="row login-card no-gutters">
             <div className="col-lg-5">
-              <img
-                src="./assets/images/cover.jpg"
-                className="img-fluid login__image"
-                alt="Project Management"
-              />
+              <img src="./assets/images/cover.jpg" className="img-fluid login__image" alt="Project Management" />
             </div>
             <div className="col-lg-7 py-5 px-4 px-lg-5 my-auto">
               <h1 className="font-weight-bold py-3 login__brand">PMS</h1>
