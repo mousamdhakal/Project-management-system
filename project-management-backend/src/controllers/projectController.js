@@ -4,6 +4,7 @@ const Boom = require('@hapi/boom');
 const {
   getAllProjects,
   getProject,
+  getRelatedProjects,
   createProject,
   updateProject,
   deleteProject,
@@ -34,7 +35,27 @@ function fetchAll(req, res, next) {
  */
 function fetchById(req, res, next) {
   getProject(req.params.id)
-    .then((data) => res.json({ data }))
+    .then((data) => {
+      data.relations.projectManager.attributes.password = undefined;
+      data.relations.users.models = data.relations.users.models.map((model) => {
+        model.attributes.password = undefined;
+        return model;
+      });
+      res.json(data);
+    })
+    .catch((err) => next(err));
+}
+
+/**
+ * Get all related projects.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
+function fetchRelatedProjects(req, res, next) {
+  getRelatedProjects(req.user)
+    .then((data) => res.json(data))
     .catch((err) => next(err));
 }
 
@@ -92,6 +113,7 @@ function remove(req, res, next) {
 module.exports = {
   fetchAll,
   fetchById,
+  fetchRelatedProjects,
   create,
   update,
   remove,

@@ -11,7 +11,7 @@ const router = Router();
 /**
  * GET /api/users
  */
-router.get('/', authenticate, authorize([roles.admin]), fetchAll);
+router.get('/', authenticate, authorize([roles[0]]), fetchAll);
 
 /**
  * GET /api/users/:id
@@ -26,7 +26,7 @@ router.get('/:id', authenticate, fetchById);
 /**
  * POST /api/users
  */
-router.post('/', authenticate, authorize([roles.admin]), userValidator, create);
+router.post('/', authenticate, authorize([roles[0]]), userValidator, create);
 
 /**
  * POST /api/users/login
@@ -36,11 +36,11 @@ router.post('/login', login);
 /**
  * PUT /api/users/:id
  */
-router.put('/:id', authenticate, authorize([roles.admin]), findUser, userValidator, update);
+router.put('/:id', authenticate, authorize([roles[0]]), findUser, userValidator, update);
 
 /**
  * DELETE /api/users/:id
  */
-router.delete('/:id', authenticate, authorize([roles.admin]), findUser, remove);
+router.delete('/:id', authenticate, authorize([roles[0]]), findUser, remove);
 
 module.exports = router;

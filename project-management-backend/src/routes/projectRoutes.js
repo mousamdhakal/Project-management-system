@@ -1,33 +1,48 @@
 const { Router } = require('express');
 
-const { fetchAll, fetchById, create, update, remove } = require('../controllers/projectController');
-const { findProject, projectValidator } = require('../validators/projectValidator');
+const {
+  fetchAll,
+  fetchById,
+  fetchRelatedProjects,
+  create,
+  update,
+  remove,
+} = require('../controllers/projectController');
+const { findAndValidateProject, findProject, projectValidator } = require('../validators/projectValidator');
+
+const authorize = require('../middlewares/authorize');
+const roles = require('../utils/roles');
 
 const router = Router();
 
 /**
- * GET /api/users
+ * GET /api/projects
  */
-router.get('/', fetchAll);
+router.get('/', authorize([roles[0], roles[1]]), fetchAll);
 
 /**
- * GET /api/users/:id
+ * GET /api/projects/related
  */
-router.get('/:id', fetchById);
+router.get('/related', fetchRelatedProjects);
 
 /**
- * POST /api/users
+ * GET /api/projects/:id
  */
-router.post('/', projectValidator, create);
+router.get('/:id', authorize([roles[0], roles[1]]), findAndValidateProject, fetchById);
 
 /**
- * PUT /api/users/:id
+ * POST /api/projects
  */
-router.put('/:id', findProject, projectValidator, update);
+router.post('/', authorize([roles[0]]), projectValidator, create);
 
 /**
- * DELETE /api/users/:id
+ * PUT /api/projects/:id
  */
-router.delete('/:id', findProject, remove);
+router.put('/:id', authorize([roles[0], roles[1]]), findAndValidateProject, projectValidator, update);
+
+/**
+ * DELETE /api/projects/:id
+ */
+router.delete('/:id', authorize([roles[0]]), findProject, remove);
 
 module.exports = router;

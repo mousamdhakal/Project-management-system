@@ -27,7 +27,14 @@ function fetchAll(req, res, next) {
  */
 function fetchById(req, res, next) {
   getTask(req.params.id)
-    .then((data) => res.json({ data }))
+    .then((data) => {
+      data.relations.assignedUser.attributes.password = undefined;
+      data.relations.taggedUsers.models = data.relations.taggedUsers.models.map((model) => {
+        model.attributes.password = undefined;
+        return model;
+      });
+      res.json(data);
+    })
     .catch((err) => next(err));
 }
 

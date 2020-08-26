@@ -33,7 +33,10 @@ function fetchAll(req, res, next) {
  */
 function fetchById(req, res, next) {
   getComment(req.params.id)
-    .then((data) => res.json({ data }))
+    .then((data) => {
+      data.relations.user.attributes.password = undefined;
+      res.json(data);
+    })
     .catch((err) => next(err));
 }
 

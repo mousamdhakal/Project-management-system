@@ -9,7 +9,32 @@ const { resolve } = require('path');
  * @returns {Promise}
  */
 function getAllProjects() {
-  return Project.fetchAll();
+  return Project.fetchAll({ withRelated: ['users', 'projectManager'] });
+}
+
+/**
+ * Get related projects.
+ *
+ * @returns {Promise}
+ */
+function getRelatedProjects(currentUser) {
+  return new Promise((resolve, reject) => {
+    Project.fetchAll({ withRelated: ['users', 'projectManager'] })
+      .then((data) => {
+        data.models = data.models.filter((project) => {
+          let filter = false;
+          project.relations.users.models.map((user) => {
+            if (user.attributes.id === currentUser.id) {
+              filter = true;
+            }
+          });
+          return filter;
+        });
+        return data;
+      })
+      .then((data) => resolve(data))
+      .catch((err) => reject(err));
+  });
 }
 
 /**
@@ -62,8 +87,11 @@ function createProject(project) {
           .users()
           .attach(project.users)
           .then((result) => resolve(data))
-          .catch((err) => reject(err));
-      });
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => reject(Boom.notAcceptable('Invalid data for creating project')));
   });
 }
 
@@ -95,6 +123,7 @@ function deleteProject(id) {
 module.exports = {
   getAllProjects,
   getProject,
+  getRelatedProjects,
   createProject,
   updateProject,
   deleteProject,

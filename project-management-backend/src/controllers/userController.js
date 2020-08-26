@@ -1,5 +1,8 @@
 const HttpStatus = require('http-status-codes');
 const Boom = require('@hapi/boom');
+const { genSaltSync, hashSync, compareSync } = require('bcrypt');
+const { sign } = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 
 const {
   getAllUsers,
@@ -9,9 +12,7 @@ const {
   deleteUser,
   getUserByUserName,
 } = require('../services/userService');
-const { genSaltSync, hashSync, compareSync } = require('bcrypt');
-const { sign } = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid');
+const roles = require('../utils/roles');
 
 /**
  * Get all users.
@@ -35,7 +36,10 @@ function fetchAll(req, res, next) {
  */
 function fetchById(req, res, next) {
   getUser(req.params.id)
-    .then((data) => res.json({ data }))
+    .then((data) => {
+      data.attributes.password = undefined;
+      res.json({ data });
+    })
     .catch((err) => next(err));
 }
 
@@ -64,6 +68,10 @@ function fetchByToken(req, res, next) {
  */
 function create(req, res, next) {
   const body = req.body;
+
+  if (!roles.includes(req.body.role) || req.body.role === 'admin') {
+    next(Boom.notAcceptable('Role not allowed'));
+  }
 
   // Hash the password to store in database
   const salt = genSaltSync(10);
