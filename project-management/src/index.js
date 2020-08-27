@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './styles/globals.css';
 import './styles/index.css';
 

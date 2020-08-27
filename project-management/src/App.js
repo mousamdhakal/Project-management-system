@@ -1,9 +1,11 @@
-import React from "react";
+import React from 'react';
+import Header from './containers/header/header';
 
-function App() {
+function App(props) {
   return (
-    <div className="App">
-      <p>Hello world!</p>
+    <div>
+      <Header />
+      {props.children}
     </div>
   );
 }

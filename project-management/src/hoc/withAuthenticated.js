@@ -12,7 +12,7 @@ export default function (ComposedComponent) {
     checkAuthenticated = () => {
       if (!this.props.isAuthenticated) {
         const { history } = this.props;
-        history.push(`/`, null);
+        history.push(`/login`, null);
       }
     };
 

@@ -2,7 +2,7 @@ import * as userActions from '../actions/userActions';
 
 let token = localStorage.getItem('jwtToken');
 
-//Initial state of todos
+//Initial state of user
 const INITIAL_STATE = {
   user: null,
   isAuthenticated: token ? true : false,
@@ -19,6 +19,9 @@ function userReducers(state = INITIAL_STATE, action) {
 
     case userActions.SET_LOG_IN_MESSAGE:
       return { ...state, loginMessage: action.payload };
+
+    case userActions.CLEAR_LOG_IN_MESSAGE:
+      return { ...state, loginMessage: null };
 
     case userActions.SET_AUTHENTICATED:
       return { ...state, isAuthenticated: true };

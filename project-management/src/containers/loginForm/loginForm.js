@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import * as userActions from '../../actions/userActions';
@@ -8,6 +8,7 @@ import * as userActions from '../../actions/userActions';
 function LoginForm() {
   const dispatch = useDispatch();
   let history = useHistory();
+  let message = useSelector((state) => state.user.loginMessage);
 
   const handleLogin = (data) => {
     dispatch(userActions.fetchUser(data, history));
@@ -26,6 +27,11 @@ function LoginForm() {
 
   return (
     <form onSubmit={formik.handleSubmit}>
+      {message ? (
+        <div class="alert alert-danger" role="alert">
+          {message}
+        </div>
+      ) : null}
       <div className="form-row">
         <div className="col-lg-7">
           <input

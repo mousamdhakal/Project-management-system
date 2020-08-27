@@ -12,7 +12,7 @@ function Login() {
             <div className="col-lg-5">
               <img src="./assets/images/cover.jpg" className="img-fluid login__image" alt="Project Management" />
             </div>
-            <div className="col-lg-7 py-5 px-4 px-lg-5 my-auto">
+            <div className="col-lg-7 py-5 py-lg-2 py-xl-5 px-4 px-lg-5 my-auto">
               <h1 className="font-weight-bold py-3 login__brand">PMS</h1>
               <h5>Log In</h5>
               <LoginForm />
