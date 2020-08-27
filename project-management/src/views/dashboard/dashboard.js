@@ -6,6 +6,7 @@ import Loader from 'react-loader-spinner';
 import './dashboard.css';
 import DashboardCard from '../../components/dashboardCard/dashBoardCard';
 import * as userActions from '../../actions/userActions';
+import * as uiActions from '../../actions/uiActions';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Dashboard extends Component {
 
     const { history } = this.props;
     this.props.fetchUserData(history);
+    this.props.setActive('dashboard');
   }
 
   render() {
@@ -83,6 +85,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchUserData: (history) => dispatch(userActions.getUserData(history)),
     removeUser: () => dispatch(userActions.removeUser()),
+    setActive: (page) => dispatch(uiActions.setActive(page)),
   };
 };
 
