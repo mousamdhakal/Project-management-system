@@ -36,10 +36,10 @@ Endpoint related to user:
 ```json
 {
   "username": "neww",
-	"password": "something123",
-	"first_name": "new",
-	"last_name": "new",
-	"role": "engineer"
+  "password": "something123",
+  "first_name": "new",
+  "last_name": "new",
+  "role": "engineer"
 }
 ```
 
