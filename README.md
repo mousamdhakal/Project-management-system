@@ -32,3 +32,5 @@ Backend folder: `project-management-backend/`
 3. Run the command in frontend directory to get frontend up and running. 
 
 Feel free to contact me at `mousamdhakal7.md@gmail.com` in case of any inconvenience.
+
+Also reach me out in case you don't have credentials for admin login yet.
