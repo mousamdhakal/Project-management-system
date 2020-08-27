@@ -9,7 +9,7 @@ Backend folder: `project-management-backend/`
 
 ## Prerequisites
 
-1. **Env** Create a .env file inside the 'project-management-backend' folder and include following details into it 
+1. **Env** Create a .env file inside the 'project-management-backend' folder of the following format: 
 
   ![Environment setup example](env_setup_example.png)
   
