@@ -21,7 +21,7 @@ router.get('/this', authenticate, fetchByToken);
 /**
  * GET /api/users/:id
  */
-router.get('/:id', authenticate, fetchById);
+router.get('/:id', authenticate, authorize([roles[0]]), fetchById);
 
 /**
  * POST /api/users
