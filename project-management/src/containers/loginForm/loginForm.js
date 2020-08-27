@@ -28,7 +28,7 @@ function LoginForm() {
   return (
     <form onSubmit={formik.handleSubmit}>
       {message ? (
-        <div class="alert alert-danger" role="alert">
+        <div className="alert alert-danger" role="alert">
           {message}
         </div>
       ) : null}

@@ -11,11 +11,11 @@ const Routes = () => (
   <BrowserRouter>
     <Switch>
       <Route path="/login" component={withUnAuthenticated(Login)}></Route>
-      <Route path="/" component={App}>
+      <App path="/">
         <Switch>
-          <Route path="/dashboard" component={withAuthenticated(DashBoard)}></Route>
+          <Route path="/" component={withAuthenticated(DashBoard)}></Route>
         </Switch>
-      </Route>
+      </App>
     </Switch>
   </BrowserRouter>
 );
