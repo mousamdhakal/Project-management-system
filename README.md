@@ -12,6 +12,8 @@ Backend folder: `project-management-backend/`
 1. **Env** Create a .env file inside the 'project-management-backend' folder of the following format: 
 
   ![Environment setup example](env_setup_example.png)
+
+  It is highly recommended to create a new database for this project so that the table names do not conflict.
   
   Put database credentials for your postgres database in variables with `DB_` prefix, `5022` as PORT which will be the port used by connected frontend application and enter some secret value for `JWTSECRETKEY` which will be used for JSONwebtokens.
 
@@ -29,7 +31,9 @@ Backend folder: `project-management-backend/`
 
 `yarn start:dev`
 
-3. Run the command in frontend directory to get frontend up and running. 
+3. Run the command in frontend directory to get frontend up and running.
+
+`yarn start`
 
 The specifics for using the backend API is given inside `/project-management-backend/` directory.
 
