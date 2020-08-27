@@ -114,7 +114,7 @@ function login(req, res, next) {
         console.log(result);
         // Create new jsonwebtoken for user authorization
         // Expire in 10 seconds for testing purpose
-        const jsonwebtoken = sign({ user: user }, process.env.JWTSECRETKEY, { expiresIn: '10s' });
+        const jsonwebtoken = sign({ user: user }, process.env.JWTSECRETKEY, { expiresIn: '12h' });
         return res.status(HttpStatus.OK).json({
           token: jsonwebtoken,
           user: user,
