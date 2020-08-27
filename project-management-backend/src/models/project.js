@@ -2,22 +2,26 @@ const bookshelf = require('../db.js');
 
 const TABLE_NAME = 'projects';
 
-let Project = bookshelf.model('Project', {
-  tableName: TABLE_NAME,
-  hasTimestamps: true,
+let Project = bookshelf.model(
+  'Project',
+  {
+    tableName: TABLE_NAME,
+    hasTimestamps: true,
 
-  projectManager() {
-    return this.belongsTo('User', 'project_manager', 'username');
-  },
+    projectManager() {
+      return this.belongsTo('User', 'project_manager', 'username');
+    },
 
-  tasks() {
-    return this.hasMany('Task', 'associated_project', 'id');
-  },
+    tasks() {
+      return this.hasMany('Task', 'associated_project', 'id');
+    },
 
-  users() {
-    return this.belongsToMany('User');
+    users() {
+      return this.belongsToMany('User');
+    },
   },
-});
+  { dependents: ['tasks', 'users'] }
+);
 
 /**
  * Project model.

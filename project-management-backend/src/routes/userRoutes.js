@@ -14,7 +14,7 @@ const router = Router();
 router.get('/', authenticate, authorize([roles[0]]), fetchAll);
 
 /**
- * GET /api/users/:id
+ * GET /api/users/this
  */
 router.get('/this', authenticate, fetchByToken);
 

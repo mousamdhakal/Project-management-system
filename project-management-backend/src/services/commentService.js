@@ -1,5 +1,6 @@
 const Boom = require('@hapi/boom');
 
+const User = require('../models/user.js');
 const Comment = require('../models/comment');
 
 /**
@@ -8,7 +9,22 @@ const Comment = require('../models/comment');
  * @returns {Promise}
  */
 function getAllComments() {
-  return Comment.fetchAll();
+  return Comment.fetchAll({ withRelated: ['user', 'task'] });
+}
+
+/**
+ * Get related comments.
+ *
+ *  @param   {Object}  currentUser
+ * @returns {Promise}
+ */
+function getRelatedComments(currentUser) {
+  return new Promise((resolve, reject) => {
+    User.where({ id: currentUser.id })
+      .fetch({ withRelated: ['comments'] })
+      .then((data) => resolve(data.relations))
+      .catch((err) => reject(err));
+  });
 }
 
 /**
@@ -70,6 +86,7 @@ module.exports = {
   getAllComments,
   getComment,
   createComment,
+  getRelatedComments,
   updateComment,
   deleteComment,
 };

@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { fetchAll, fetchById, create, update, remove } = require('../controllers/commentController');
+const { fetchAll, fetchRelated, fetchById, create, update, remove } = require('../controllers/commentController');
 const { findComment, commentValidator } = require('../validators/commentValidator');
 
 const authorize = require('../middlewares/authorize');
@@ -9,9 +9,14 @@ const roles = require('../utils/roles');
 const router = Router();
 
 /**
- * GET /api/comments
+ * GET /api/comments/
  */
-router.get('/', authorize([roles[0]]), fetchAll);
+router.get('/', fetchRelated);
+
+/**
+ * GET /api/comments/all
+ */
+router.get('/all', authorize([roles[0]]), fetchAll);
 
 /**
  * GET /api/comments/:id

@@ -8,7 +8,7 @@ const {
   update,
   remove,
 } = require('../controllers/projectController');
-const { findAndValidateProject, findProject, projectValidator } = require('../validators/projectValidator');
+const { projectAuthorizer, findProject, projectValidator } = require('../validators/projectValidator');
 
 const authorize = require('../middlewares/authorize');
 const roles = require('../utils/roles');
@@ -16,19 +16,19 @@ const roles = require('../utils/roles');
 const router = Router();
 
 /**
- * GET /api/projects
+ * GET /api/projects/
  */
-router.get('/', authorize([roles[0], roles[1]]), fetchAll);
+router.get('/', fetchRelatedProjects);
 
 /**
- * GET /api/projects/related
+ * GET /api/projects/all
  */
-router.get('/related', fetchRelatedProjects);
+router.get('/all', authorize([roles[0], roles[1]]), fetchAll);
 
 /**
  * GET /api/projects/:id
  */
-router.get('/:id', authorize([roles[0], roles[1]]), findAndValidateProject, fetchById);
+router.get('/:id', authorize([roles[0], roles[1], roles[2], roles[3]]), projectAuthorizer, fetchById);
 
 /**
  * POST /api/projects
@@ -38,11 +38,11 @@ router.post('/', authorize([roles[0]]), projectValidator, create);
 /**
  * PUT /api/projects/:id
  */
-router.put('/:id', authorize([roles[0], roles[1]]), findAndValidateProject, projectValidator, update);
+router.put('/:id', authorize([roles[0], roles[1]]), projectAuthorizer, projectValidator, update);
 
 /**
  * DELETE /api/projects/:id
  */
-router.delete('/:id', authorize([roles[0]]), findProject, remove);
+router.delete('/:id', authorize([roles[0]]), projectAuthorizer, remove);
 
 module.exports = router;

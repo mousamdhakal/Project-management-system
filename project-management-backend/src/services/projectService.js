@@ -1,7 +1,8 @@
 const Boom = require('@hapi/boom');
 
+const roles = require('../utils/roles');
+const User = require('../models/user.js');
 const Project = require('../models/project.js');
-const { resolve } = require('path');
 
 /**
  * Get all projects.
@@ -15,24 +16,21 @@ function getAllProjects() {
 /**
  * Get related projects.
  *
+ *  @param   {Object}  currentUser
  * @returns {Promise}
  */
 function getRelatedProjects(currentUser) {
+  let related = [];
+  if (currentUser.role === roles[1]) {
+    related = ['managedProjects'];
+  } else {
+    related = ['projects'];
+  }
+
   return new Promise((resolve, reject) => {
-    Project.fetchAll({ withRelated: ['users', 'projectManager'] })
-      .then((data) => {
-        data.models = data.models.filter((project) => {
-          let filter = false;
-          project.relations.users.models.map((user) => {
-            if (user.attributes.id === currentUser.id) {
-              filter = true;
-            }
-          });
-          return filter;
-        });
-        return data;
-      })
-      .then((data) => resolve(data))
+    User.where({ id: currentUser.id })
+      .fetch({ withRelated: related })
+      .then((data) => resolve(data.relations))
       .catch((err) => reject(err));
   });
 }
@@ -103,10 +101,31 @@ function createProject(project) {
  * @returns {Promise}
  */
 function updateProject(id, project) {
-  return new Project({ id }).save({
-    title: project.title,
-    description: project.description,
-    project_manager: project.project_manager,
+  return new Promise((resolve, reject) => {
+    new Project({ id })
+      .save({
+        title: project.title,
+        description: project.description,
+        project_manager: project.project_manager,
+      })
+      .then((data) => {
+        data
+          .users()
+          .detach()
+          .then((result) => {
+            data
+              .users()
+              .attach(project.users)
+              .then((result) => resolve(data))
+              .catch((err) => {
+                throw err;
+              });
+          })
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => reject(Boom.notAcceptable('Invalid data for updating project')));
   });
 }
 

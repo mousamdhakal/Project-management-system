@@ -1,7 +1,14 @@
 const HttpStatus = require('http-status-codes');
 const Boom = require('@hapi/boom');
 
-const { getAllTasks, getTask, createTask, updateTask, deleteTask } = require('../services/taskService');
+const {
+  getAllTasks,
+  getRelatedTasks,
+  getTask,
+  createTask,
+  updateTask,
+  deleteTask,
+} = require('../services/taskService');
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -14,6 +21,19 @@ const { v4: uuidv4 } = require('uuid');
  */
 function fetchAll(req, res, next) {
   getAllTasks()
+    .then((data) => res.json({ data }))
+    .catch((err) => next(err));
+}
+
+/**
+ * Get all tasks.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
+function fetchRelatedTasks(req, res, next) {
+  getRelatedTasks(req.user)
     .then((data) => res.json({ data }))
     .catch((err) => next(err));
 }
@@ -84,6 +104,7 @@ function remove(req, res, next) {
 
 module.exports = {
   fetchAll,
+  fetchRelatedTasks,
   fetchById,
   create,
   update,

@@ -10,6 +10,10 @@ let User = bookshelf.model('User', {
     return this.hasMany('Project', 'project_manager', 'username');
   },
 
+  previouslyAssignedTasks() {
+    return this.hasMany('Task', 'previously_assigned_user', 'username');
+  },
+
   assignedTasks() {
     return this.hasMany('Task', 'assigned_user', 'username');
   },

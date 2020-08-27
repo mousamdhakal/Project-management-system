@@ -3,6 +3,7 @@ const Boom = require('@hapi/boom');
 
 const {
   getAllComments,
+  getRelatedComments,
   getComment,
   createComment,
   updateComment,
@@ -24,6 +25,18 @@ function fetchAll(req, res, next) {
     .catch((err) => next(err));
 }
 
+/**
+ * Get all comments.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
+function fetchRelated(req, res, next) {
+  getRelatedComments(req.user)
+    .then((data) => res.json({ data }))
+    .catch((err) => next(err));
+}
 /**
  * Get a comment by its id.
  *
@@ -86,6 +99,7 @@ function remove(req, res, next) {
 
 module.exports = {
   fetchAll,
+  fetchRelated,
   fetchById,
   create,
   update,

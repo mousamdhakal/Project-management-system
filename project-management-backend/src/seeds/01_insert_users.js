@@ -17,5 +17,14 @@ exports.seed = function (knex) {
       role: 'admin',
       created_at: new Date(),
     },
+    {
+      id: 'c9d37206-101a-4de9-933d-285faafe4be2',
+      username: 'someone',
+      first_name: 'secret',
+      last_name: 'secret',
+      role: 'projectmanager',
+      password: '$2b$10$K9W/eGYMS2sOw7cLVSxlw.4WRHcwbmewerFOK9DrbVK//.LgPJPpe',
+      created_at: new Date(),
+    },
   ]);
 };

@@ -50,18 +50,21 @@ function findProject(req, res, next) {
  * @param   {Function} next
  * @returns {Promise}
  */
-function findAndValidateProject(req, res, next) {
+function projectAuthorizer(req, res, next) {
   return getProject(req.params.id)
     .then((project) => {
       // Only allow admin or the project manager who is assigned the project to update the project
       if (req.user.role === roles[0]) {
         return next();
       }
-      if (project.relations.projectManager.attributes.id === req.user.id) {
+      if (req.user.role === roles[1] && project.relations.projectManager.attributes.id === req.user.id) {
         // Restrict project manager from updating the project manager of the project
         if (req.body && req.body.project_manager !== undefined) {
           return next(Boom.unauthorized('Unauthorized to update project manager of the project'));
         }
+        return next();
+      }
+      if (req.user.role === roles[2] || req.user.role === roles[3]) {
         return next();
       }
 
@@ -70,4 +73,33 @@ function findAndValidateProject(req, res, next) {
     .catch((err) => next(err));
 }
 
-module.exports = { findProject, findAndValidateProject, projectValidator };
+/**
+ * Validate project's existence and otehr permission for update.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
+function involvementChecker(req, res, next) {
+  return getProject(req.params.id)
+    .then((project) => {
+      if (req.user.role === roles[0] || req.user.role === roles[1]) {
+        return next();
+      }
+      if (req.user.role === roles[2] || req.user.role === roles[3]) {
+        let isInvolved = false;
+        project.relations.users.models.forEach((modal) => {
+          if (modal.attributes.id === req.user.id) {
+            isInvolved = true;
+          }
+        });
+        if (isInvolved) {
+          return next();
+        }
+      }
+    })
+    .catch((err) => next(err));
+}
+
+module.exports = { findProject, projectAuthorizer, projectValidator, involvementChecker };

@@ -19,7 +19,7 @@ function getAllUsers() {
  */
 function getUser(id) {
   return new User({ id })
-    .fetch({ withRelated: ['managedProjects', 'projects'] })
+    .fetch({ withRelated: ['managedProjects', 'projects', 'tasks', 'assignedTasks', 'comments'] })
     .then((user) => user)
     .catch(User.NotFoundError, () => {
       throw Boom.notFound('User not found');

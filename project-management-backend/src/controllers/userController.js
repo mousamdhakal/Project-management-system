@@ -70,7 +70,7 @@ function create(req, res, next) {
   const body = req.body;
 
   if (!roles.includes(req.body.role) || req.body.role === 'admin') {
-    next(Boom.notAcceptable('Role not allowed'));
+    return next(Boom.notAcceptable('Role not allowed'));
   }
 
   // Hash the password to store in database
@@ -87,7 +87,10 @@ function create(req, res, next) {
     })
     .catch((err) => {
       createUser(req.body)
-        .then((data) => res.status(HttpStatus.CREATED).json({ data }))
+        .then((data) => {
+          data.attributes.password = undefined;
+          res.status(HttpStatus.CREATED).json({ data });
+        })
         .catch((err) => next(err));
     });
 }
@@ -110,7 +113,8 @@ function login(req, res, next) {
         user.password = undefined;
         console.log(result);
         // Create new jsonwebtoken for user authorization
-        const jsonwebtoken = sign({ user: user }, process.env.JWTSECRETKEY);
+        // Expire in 10 seconds for testing purpose
+        const jsonwebtoken = sign({ user: user }, process.env.JWTSECRETKEY, { expiresIn: '10s' });
         return res.status(HttpStatus.OK).json({
           token: jsonwebtoken,
           user: user,

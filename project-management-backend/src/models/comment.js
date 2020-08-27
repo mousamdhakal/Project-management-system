@@ -15,31 +15,4 @@ let Comment = bookshelf.model('Comment', {
   },
 });
 
-/**
- * Comment model.
- */
-// class Comment extends bookshelf.Model {
-//   /**
-//    * Get table name.
-//    */
-//   get tableName() {
-//     return TABLE_NAME;
-//   }
-
-//   /**
-//    * Table has timestamps.
-//    */
-//   get hasTimestamps() {
-//     return true;
-//   }
-
-//   get user() {
-//     this.belongsTo('User', 'user', 'username');
-//   }
-
-//   get task() {
-//     this.belongsTo('Task', 'task', 'id');
-//   }
-// }
-
 module.exports = Comment;

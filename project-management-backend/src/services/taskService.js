@@ -1,5 +1,6 @@
 const Boom = require('@hapi/boom');
 
+const User = require('../models/user.js');
 const Task = require('../models/task.js');
 
 /**
@@ -8,7 +9,7 @@ const Task = require('../models/task.js');
  * @returns {Promise}
  */
 function getAllTasks() {
-  return Task.fetchAll();
+  return Task.fetchAll({ withRelated: ['assignedUser', 'project', 'taggedUsers'] });
 }
 
 /**
@@ -27,7 +28,22 @@ function getTask(id) {
 }
 
 /**
- * Get a task.y title.
+ * Get related tasks.
+ *
+ *  @param   {Object}  currentUser
+ * @returns {Promise}
+ */
+function getRelatedTasks(currentUser) {
+  return new Promise((resolve, reject) => {
+    User.where({ id: currentUser.id })
+      .fetch({ withRelated: ['tasks', 'assignedTasks'] })
+      .then((data) => resolve(data.relations))
+      .catch((err) => reject(err));
+  });
+}
+
+/**
+ * Get a task by title.
  *
  * @param   {String}  id
  * @returns {Promise}
@@ -48,14 +64,27 @@ function getTaskByTitle(title) {
  * @returns {Promise}
  */
 function createTask(task) {
-  return new Task({
-    id: task.id,
-    title: task.title,
-    description: task.description,
-    assigned_user: task.assigned_user,
-    associated_project: task.associated_project,
-    deadline: task.deadline,
-  }).save(null, { method: 'insert' });
+  return new Promise((resolve, reject) => {
+    new Task({
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      assigned_user: task.assigned_user,
+      associated_project: task.associated_project,
+      deadline: task.deadline,
+    })
+      .save(null, { method: 'insert' })
+      .then((data) => {
+        data
+          .taggedUsers()
+          .attach(task.users)
+          .then((result) => resolve(data))
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => reject(Boom.notAcceptable('Invalid data for creating task')));
+  });
 }
 
 /**
@@ -66,12 +95,34 @@ function createTask(task) {
  * @returns {Promise}
  */
 function updateTask(id, task) {
-  return new Task({ id }).save({
-    title: task.title,
-    description: task.description,
-    assigned_user: task.assigned_user,
-    associated_project: task.associated_project,
-    deadline: task.deadline,
+  return new Promise((resolve, reject) => {
+    new Task({ id })
+      .save({
+        title: task.title,
+        description: task.description,
+        assigned_user: task.assigned_user,
+        previously_assigned_user: task.previously_assigned_user,
+        associated_project: task.associated_project,
+        deadline: task.deadline,
+      })
+      .then((data) => {
+        data
+          .taggedUsers()
+          .detach()
+          .then((result) => {
+            data
+              .taggedUsers()
+              .attach(task.users)
+              .then((result) => resolve(data))
+              .catch((err) => {
+                throw err;
+              });
+          })
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => reject(Boom.notAcceptable('Invalid data for updating task')));
   });
 }
 
@@ -92,4 +143,5 @@ module.exports = {
   updateTask,
   deleteTask,
   getTaskByTitle,
+  getRelatedTasks,
 };
