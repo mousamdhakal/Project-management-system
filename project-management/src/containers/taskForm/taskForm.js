@@ -3,23 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Formik, FieldArray, Field } from 'formik';
 import * as Yup from 'yup';
 
-import * as projectsActions from '../../actions/projectsActions';
+import * as TaskActions from '../../actions/taskActions';
 
-function ProjectForm(props) {
+function TaskForm(props) {
   const dispatch = useDispatch();
-  let message = useSelector((state) => state.projects.formMessage);
+  let message = useSelector((state) => state.task.formMessage);
 
   let info;
   if (props.info) {
     info = props.info();
   }
 
-  const ProjectSchema = Yup.object().shape({
-    title: Yup.string().min(3, 'Too Short!').max(100, 'Too Long!').required('Required'),
+  const TaskSchema = Yup.object().shape({
+    title: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
 
-    description: Yup.string().min(2, 'Too Short!').required('Required'),
+    description: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
 
-    project_manager: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+    associated_project: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+
+    deadline: Yup.date(),
   });
 
   return (
@@ -27,16 +29,19 @@ function ProjectForm(props) {
       initialValues={{
         title: info ? info.title : '',
         description: info ? info.description : '',
-        project_manager: info ? info.project_manager : '',
+        assigned_user: info ? info.assigned_user : '',
+        associated_project: props.project || '',
+        deadline: info ? info.deadline : '',
         users: info ? info.users : [''],
       }}
-      validationSchema={ProjectSchema}
+      validationSchema={TaskSchema}
       onSubmit={(values, actions) => {
-        if (!info) {
-          dispatch(projectsActions.fetchNewProject(JSON.stringify(values, null, 2)));
-        } else {
-          dispatch(projectsActions.updateProjectById(props.url, JSON.stringify(values, null, 2)));
-        }
+        console.log('submitted');
+        // if (!info) {
+        dispatch(TaskActions.fetchNewTask(props.url, JSON.stringify(values, null, 2)));
+        // } else {
+        // dispatch(projectsActions.updateProjectById(props.url, JSON.stringify(values, null, 2)));
+        // }
         actions.setSubmitting(false);
       }}
     >
@@ -53,7 +58,7 @@ function ProjectForm(props) {
               type="text"
               className="form-control"
               id="title"
-              placeholder="Title of the project"
+              placeholder="Title of the task"
               onChange={props.handleChange}
               onBlur={props.handleBlur}
               value={props.values.title}
@@ -80,26 +85,41 @@ function ProjectForm(props) {
             )}
           </div>
           <div className="form-group">
-            <label htmlFor="project_manager">Project Manager</label>
+            <label htmlFor="assigned_user">Assigned User</label>
             <input
               type="text"
               className="form-control"
-              id="project_manager"
-              placeholder="Username of the project manager"
+              id="assigned_user"
+              placeholder="Username of the assigned user"
               onChange={props.handleChange}
               onBlur={props.handleBlur}
-              value={props.values.project_manager}
+              value={props.values.assigned_user}
             />
 
-            {props.errors.project_manager && props.touched.project_manager && (
-              <small className="form-text text-muted">{props.errors.project_manager}</small>
+            {props.errors.assigned_user && props.touched.assigned_user && (
+              <small className="form-text text-muted">{props.errors.assigned_user}</small>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="deadline">Deadline</label>
+            <input
+              type="date"
+              className="form-control"
+              id="deadline"
+              onChange={props.handleChange}
+              onBlur={props.handleBlur}
+              value={props.values.deadline}
+            />
+
+            {props.errors.deadline && props.touched.deadline && (
+              <small className="form-text text-muted">{props.errors.deadline}</small>
             )}
           </div>
           <FieldArray
             name="users"
             render={(arrayHelpers) => (
               <div className="form-group">
-                <label>Users assigned to project</label>
+                <label>Users tagged to the task</label>
                 {props.values.users && props.values.users.length > 0 ? (
                   props.values.users.map((user, index) => (
                     <div className="form-control" key={index}>
@@ -124,7 +144,7 @@ function ProjectForm(props) {
                   ))
                 ) : (
                   <button className="btn btn-info" type="button" onClick={() => arrayHelpers.push('')}>
-                    Add a user to project
+                    Tag user to the task
                   </button>
                 )}
               </div>
@@ -141,4 +161,4 @@ function ProjectForm(props) {
   );
 }
 
-export default ProjectForm;
+export default TaskForm;

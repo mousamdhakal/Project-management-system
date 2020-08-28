@@ -25,12 +25,32 @@ export const createNewProject = (project) => {
   });
 };
 
+export const createNewTask = (task) => {
+  return axios.post(`${BASE_URL}/tasks`, task, {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
 export const getAllUsers = () => {
   return axios.get(`${BASE_URL}/users`);
 };
 
 export const getAllProjects = () => {
   return axios.get(`${BASE_URL}/projects/all`);
+};
+
+export const getItemById = (url) => {
+  return axios.get(`${BASE_URL}${url}`);
+};
+
+export const updateProject = (url, project) => {
+  return axios.put(`${BASE_URL}${url}`, project, {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
 };
 
 export const getThisUser = () => {

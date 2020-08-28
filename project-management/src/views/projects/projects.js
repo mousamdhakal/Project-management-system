@@ -51,6 +51,8 @@ function Projects() {
                             key={project.id}
                             id={project.id}
                             title={project.title}
+                            button="View project Details"
+                            link={`/projects/${project.id}`}
                             bg="primary"
                           >
                             <h5 className="card-title">Project Manager: {project.project_manager}</h5>
@@ -63,6 +65,8 @@ function Projects() {
                             key={project.id}
                             id={project.id}
                             title={project.title}
+                            button="View project Details"
+                            link={`/projects/${project.id}`}
                             bg="secondary"
                           >
                             <h5 className="card-title">Project Manager: {project.project_manager}</h5>

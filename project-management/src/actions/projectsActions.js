@@ -1,12 +1,18 @@
-import { getAllProjects, createNewProject } from '../services/http';
+import { getAllProjects, createNewProject, getItemById, updateProject } from '../services/http';
 
 export const SET_PROJECTS = 'SET_PROJECTS';
+export const SET_PROJECT = 'SET_PROJECT';
 export const SET_PROJECT_FORM_MESSAGE = 'SET_PROJECT_FORM_MESSAGE';
 export const CLEAR_PROJECT_FORM_MESSAGE = 'CLEAR_PROJECT_FORM_MESSAGE';
 
 export const setProjects = (projects) => ({
   type: SET_PROJECTS,
   payload: projects,
+});
+
+export const setProject = (project) => ({
+  type: SET_PROJECT,
+  payload: project,
 });
 
 export const setProjectFormMessage = (message) => ({
@@ -38,6 +44,38 @@ export const fetchNewProject = (project) => {
       .then((res) => {
         dispatch(fetchAllProjects());
         dispatch(clearProjectFormMessage());
+      })
+      .catch((err) => {
+        if (err.response) {
+          let error = err.response.data.error.details
+            ? err.response.data.error.details[0].message
+            : err.response.data.error.message;
+          dispatch(setProjectFormMessage(error));
+        } else {
+          console.log(err);
+        }
+      });
+  };
+};
+
+export const fetchProjectById = (url) => {
+  return (dispatch) => {
+    getItemById(url)
+      .then((res) => {
+        dispatch(setProject(res.data));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const updateProjectById = (url, project) => {
+  return (dispatch) => {
+    updateProject(url, project)
+      .then((res) => {
+        dispatch(fetchProjectById(url));
+        dispatch(setProjectFormMessage('Updated successfully'));
       })
       .catch((err) => {
         if (err.response) {

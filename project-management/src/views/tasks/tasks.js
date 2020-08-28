@@ -43,7 +43,12 @@ function Tasks() {
                         id={task.id}
                         title={task.title}
                         bg="primary"
+                        button="View task"
+                        link={`/tasks/${task.id}`}
                       >
+                        <h5 className="card-title">
+                          Task Deadline: {`${new Date(task.deadline).toLocaleDateString()}`}
+                        </h5>
                         <p className="card-text text-secondary text-small">{task.description}</p>
                       </AccordionItem>
                     ))}

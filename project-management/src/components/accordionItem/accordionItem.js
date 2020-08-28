@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function AccordionItem(props) {
   return (
@@ -14,6 +15,11 @@ function AccordionItem(props) {
       </div>
       <div className="collapse" id={`${props.unique}`} data-parent="#accordion">
         <div className="card-body">{props.children}</div>
+        <div className="card-footer text-center">
+          <Link to={{ pathname: `${props.link}` }}>
+            <button className="btn btn-primary">{props.button}</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,21 @@
+.project-description {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #eee;
+}
+
+.project-task-text {
+  color: black;
+}
+
+.project-task:hover {
+  text-decoration: none;
+}
+
+.projects-task-text:hover {
+  background-color: #eee;
+}
+
+.user-group {
+  width: 50%;
+}

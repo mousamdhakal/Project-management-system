@@ -37,7 +37,7 @@ export const fetchNewUser = (user) => {
     createNewUser(user)
       .then((res) => {
         dispatch(fetchAllUsers());
-        dispatch(clearUserFormMessage());
+        dispatch(setUserFormMessage('User created successfully'));
       })
       .catch((err) => {
         if (err.response) {
