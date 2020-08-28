@@ -1,9 +1,20 @@
-import { getAllProjects, createNewProject, getItemById, updateProject } from '../services/http';
+import { getAllProjects, createNewProject, getItemById, updateItem, deleteProject } from '../services/http';
 
 export const SET_PROJECTS = 'SET_PROJECTS';
 export const SET_PROJECT = 'SET_PROJECT';
 export const SET_PROJECT_FORM_MESSAGE = 'SET_PROJECT_FORM_MESSAGE';
 export const CLEAR_PROJECT_FORM_MESSAGE = 'CLEAR_PROJECT_FORM_MESSAGE';
+export const SET_PROJECT_DELETE_MESSAGE = 'SET_PROJECT_DELETE_MESSAGE';
+export const CLEAR_PROJECT_DELETE_MESSAGE = 'CLEAR_PROJECT_DELETE_MESSAGE';
+
+export const setProjectDeleteMessage = (message) => ({
+  type: SET_PROJECT_DELETE_MESSAGE,
+  payload: message,
+});
+
+export const clearProjectDeleteMessage = () => ({
+  type: CLEAR_PROJECT_DELETE_MESSAGE,
+});
 
 export const setProjects = (projects) => ({
   type: SET_PROJECTS,
@@ -43,7 +54,10 @@ export const fetchNewProject = (project) => {
     createNewProject(project)
       .then((res) => {
         dispatch(fetchAllProjects());
-        dispatch(clearProjectFormMessage());
+        dispatch(setProjectFormMessage('Project Created successfully'));
+        setTimeout(() => {
+          dispatch(clearProjectFormMessage());
+        }, 5000);
       })
       .catch((err) => {
         if (err.response) {
@@ -51,8 +65,14 @@ export const fetchNewProject = (project) => {
             ? err.response.data.error.details[0].message
             : err.response.data.error.message;
           dispatch(setProjectFormMessage(error));
+          setTimeout(() => {
+            dispatch(clearProjectFormMessage());
+          }, 5000);
         } else {
-          console.log(err);
+          dispatch(setProjectFormMessage('Error creating the project'));
+          setTimeout(() => {
+            dispatch(clearProjectFormMessage());
+          }, 5000);
         }
       });
   };
@@ -72,10 +92,13 @@ export const fetchProjectById = (url) => {
 
 export const updateProjectById = (url, project) => {
   return (dispatch) => {
-    updateProject(url, project)
+    updateItem(url, project)
       .then((res) => {
         dispatch(fetchProjectById(url));
         dispatch(setProjectFormMessage('Updated successfully'));
+        setTimeout(() => {
+          dispatch(clearProjectFormMessage());
+        }, 5000);
       })
       .catch((err) => {
         if (err.response) {
@@ -83,9 +106,31 @@ export const updateProjectById = (url, project) => {
             ? err.response.data.error.details[0].message
             : err.response.data.error.message;
           dispatch(setProjectFormMessage(error));
+          setTimeout(() => {
+            dispatch(clearProjectFormMessage());
+          }, 5000);
         } else {
           console.log(err);
         }
+      });
+  };
+};
+
+export const deleteAProject = (id) => {
+  return (dispatch) => {
+    deleteProject(id)
+      .then((res) => {
+        dispatch(fetchAllProjects());
+        dispatch(setProjectDeleteMessage('Project deleted successfully'));
+        setTimeout(() => {
+          dispatch(clearProjectDeleteMessage());
+        }, 3000);
+      })
+      .catch((err) => {
+        dispatch(setProjectDeleteMessage('Cannot delete project. Check if any task in the project are still existing'));
+        setTimeout(() => {
+          dispatch(clearProjectDeleteMessage());
+        }, 3000);
       });
   };
 };

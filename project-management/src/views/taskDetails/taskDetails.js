@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
 import * as taskActions from '../../actions/taskActions';
 import * as uiActions from '../../actions/uiActions';
 
 import ModalForm from '../../components/modalForm/modalForm';
+import TaskForm from '../../containers/taskForm/taskForm';
+import CommentForm from '../../containers/commentForm/commentForm';
 // import './taskDetails.css';
 // import ProjectForm from '../../containers/projectForm/projectForm';
 
@@ -16,18 +18,19 @@ class TaskDetails extends Component {
     this.props.setActive('tasks');
   }
 
-  // info = () => {
-  //   let users = [];
-  //   this.props.project.users.forEach((user) => {
-  //     users.push(user.username);
-  //   });
-  //   return {
-  //     title: this.props.project.title || '',
-  //     description: this.props.project.description || '',
-  //     project_manager: this.props.project.project_manager || '',
-  //     users: users,
-  //   };
-  // };
+  info = () => {
+    let users = [];
+    this.props.task.taggedUsers.forEach((user) => {
+      users.push(user.username);
+    });
+    return {
+      title: this.props.task.title || '',
+      description: this.props.task.description || '',
+      assigned_user: this.props.task.assigned_user || '',
+      deadline: this.props.task.deadline || '',
+      users: users,
+    };
+  };
 
   render() {
     return (
@@ -44,7 +47,14 @@ class TaskDetails extends Component {
                     </button>
                   </h3>
                   <ModalForm id="createTask" title="Create New user">
-                    {/* <ProjectForm url={this.props.location.pathname} info={() => this.info()} /> */}
+                    <TaskForm
+                      url={this.props.location.pathname}
+                      project={this.props.task.associated_project}
+                      info={() => this.info()}
+                    />
+                  </ModalForm>
+                  <ModalForm id="addComment" title="Add new Comment">
+                    <CommentForm url={this.props.location.pathname} task={this.props.task.id} />
                   </ModalForm>
                   <div className="container">
                     <div className="card">
@@ -61,11 +71,9 @@ class TaskDetails extends Component {
                           <h5 className="my-3 ml-3">Comments:</h5>
                           {this.props.task.comments.length > 0 ? (
                             this.props.task.comments.map((comment, index) => (
-                              <Link key={index} className="projects-task bg-info">
-                                <li className="list-group-item project-task-text">
-                                  {index + 1} ) {comment.text}
-                                </li>
-                              </Link>
+                              <li key={index} className="list-group-item project-task-text">
+                                {comment.user} <i className="fas fa-long-arrow-alt-right"></i> {comment.text}
+                              </li>
                             ))
                           ) : (
                             <p className="ml-3">No comments in the task.</p>
@@ -83,9 +91,9 @@ class TaskDetails extends Component {
                             <p className="ml-3">No users tagged in the task.</p>
                           )}
                         </ul>
-                        {/* <a href="/" className="btn btn-primary">
-                          Add task
-                        </a> */}
+                        <button className="btn btn-info btn-lg" data-toggle="modal" data-target="#addComment">
+                          Add comment
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -104,7 +112,7 @@ class TaskDetails extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { task: state.task.task };
+  return { task: state.task.task, user: state.user.user };
 };
 
 const mapDispatchToProps = (dispatch) => {

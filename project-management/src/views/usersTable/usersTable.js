@@ -30,6 +30,11 @@ class UsersTable extends Component {
                       Create new User
                     </button>
                   </h3>
+                  {this.props.message ? (
+                    <div className="alert alert-danger" role="alert">
+                      {this.props.message}
+                    </div>
+                  ) : null}
                   <ModalForm id="createUser" title="Create New user">
                     <UserForm />
                   </ModalForm>
@@ -42,7 +47,7 @@ class UsersTable extends Component {
                           <td>First Name</td>
                           <td>Last Name</td>
                           <td>Role</td>
-                          <td>Edit</td>
+                          {/* <td>Edit</td> */}
                           <td>Remove</td>
                         </tr>
 
@@ -53,11 +58,18 @@ class UsersTable extends Component {
                             <td>{user.first_name}</td>
                             <td>{user.last_name}</td>
                             <td>{user.role}</td>
-                            <td>
+                            {/* <td>
                               <button className="btn btn-info btn-sm">Edit</button>
-                            </td>
+                            </td> */}
                             <td>
-                              <button className="btn btn-danger btn-sm">Delete</button>
+                              <button
+                                className="btn btn-danger btn-sm"
+                                onClick={() => {
+                                  this.props.deleteUser(user.id);
+                                }}
+                              >
+                                Delete
+                              </button>
                             </td>
                           </tr>
                         ))}
@@ -79,12 +91,13 @@ class UsersTable extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { users: state.users.users };
+  return { users: state.users.users, message: state.users.deleteMessage };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchAllUsers: () => dispatch(usersActions.fetchAllUsers()),
+    deleteUser: (id) => dispatch(usersActions.deleteAUser(id)),
     setActive: (page) => dispatch(uiActions.setActive(page)),
   };
 };

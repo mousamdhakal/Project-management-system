@@ -52,13 +52,6 @@ function Sidebar() {
           toast={displayToast}
         />
         <SideBarItem
-          class={active === 'comments' ? 'sidebar__link--current' : null}
-          icon="fa-comment"
-          link="/comments"
-          title="Comments"
-          toast={displayToast}
-        />
-        <SideBarItem
           class={active === 'users' ? 'sidebar__link--current' : null}
           link="/userstable"
           icon="fa-users"

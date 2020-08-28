@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
 import * as projectsActions from '../../actions/projectsActions';
@@ -34,6 +34,11 @@ class ProjectsTable extends Component {
                       Create new Project
                     </button>
                   </h3>
+                  {this.props.message ? (
+                    <div className="alert alert-danger" role="alert">
+                      {this.props.message}
+                    </div>
+                  ) : null}
                   <ModalForm id="createProject" title="Create New user">
                     <ProjectForm />
                   </ModalForm>
@@ -46,7 +51,6 @@ class ProjectsTable extends Component {
                           <td>Description</td>
                           <td>Project Manager</td>
                           <td>Users</td>
-                          <td>Edit</td>
                           {this.props.user.role === 'admin' ? <td>Remove</td> : null}
                         </tr>
 
@@ -58,14 +62,18 @@ class ProjectsTable extends Component {
                             <td>{project.project_manager}</td>
                             <td>
                               <span>{project.users.length}</span>
-                              <button className="btn btn-info btn-sm ml-3">View all</button>
-                            </td>
-                            <td>
-                              <button className="btn btn-info btn-sm">Edit</button>
+                              <Link to={{ pathname: `/projects/${project.id}` }}>
+                                <button className="btn btn-info btn-sm ml-3">View all</button>
+                              </Link>
                             </td>
                             {this.props.user.role === 'admin' ? (
                               <td>
-                                <button className="btn btn-danger btn-sm">Delete</button>
+                                <button
+                                  className="btn btn-danger btn-sm"
+                                  onClick={() => this.props.deleteProject(project.id)}
+                                >
+                                  Delete
+                                </button>
                               </td>
                             ) : null}
                           </tr>
@@ -88,12 +96,13 @@ class ProjectsTable extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { projects: state.projects.projects, user: state.user.user };
+  return { projects: state.projects.projects, user: state.user.user, message: state.projects.deleteMessage };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchAllProjects: () => dispatch(projectsActions.fetchAllProjects()),
+    deleteProject: (id) => dispatch(projectsActions.deleteAProject(id)),
     setActive: (page) => dispatch(uiActions.setActive(page)),
   };
 };

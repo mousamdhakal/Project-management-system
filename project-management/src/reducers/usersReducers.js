@@ -5,6 +5,7 @@ import * as userActions from '../actions/userActions';
 const INITIAL_STATE = {
   users: null,
   formMessage: null,
+  deleteMessage: null,
 };
 
 function usersReducers(state = INITIAL_STATE, action) {
@@ -17,6 +18,12 @@ function usersReducers(state = INITIAL_STATE, action) {
 
     case usersActions.CLEAR_USER_FORM_MESSAGE:
       return { ...state, formMessage: null };
+
+    case usersActions.SET_USER_DELETE_MESSAGE:
+      return { ...state, deleteMessage: action.payload };
+
+    case usersActions.CLEAR_USER_DELETE_MESSAGE:
+      return { ...state, deleteMessage: null };
 
     case userActions.REMOVE_USER:
       return { ...INITIAL_STATE };

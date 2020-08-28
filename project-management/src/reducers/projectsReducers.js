@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   projects: null,
   project: null,
   formMessage: null,
+  deleteMessage: null,
 };
 
 function projectsReducers(state = INITIAL_STATE, action) {
@@ -21,6 +22,12 @@ function projectsReducers(state = INITIAL_STATE, action) {
 
     case projectsActions.CLEAR_PROJECT_FORM_MESSAGE:
       return { ...state, formMessage: null };
+
+    case projectsActions.SET_PROJECT_DELETE_MESSAGE:
+      return { ...state, deleteMessage: action.payload };
+
+    case projectsActions.CLEAR_PROJECT_DELETE_MESSAGE:
+      return { ...state, deleteMessage: null };
 
     case userActions.REMOVE_USER:
       return { ...INITIAL_STATE };

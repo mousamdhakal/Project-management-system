@@ -34,49 +34,62 @@ function Projects() {
               <div className="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 {/* Project details */}
                 <h3 className="text-muted mb-4 mt-2 text-center">
-                  Involved Projects
                   {user.role === 'admin' || user.role === 'projectmanager' ? (
                     <Link to={{ pathname: '/projectstable' }}>
-                      <button className="btn btn-info btn-lg float-right">View all Projects</button>
+                      <button className="btn btn-info btn-lg ">View all Projects</button>
                     </Link>
                   ) : null}
                 </h3>
                 <div id="accordion">
                   <div className="row">
-                    {user.projects.length > 0 || user.managedProjects.length > 0 ? (
-                      <>
-                        {user.managedProjects.map((project) => (
-                          <AccordionItem
-                            unique={random('lower')}
-                            key={project.id}
-                            id={project.id}
-                            title={project.title}
-                            button="View project Details"
-                            link={`/projects/${project.id}`}
-                            bg="primary"
-                          >
-                            <h5 className="card-title">Project Manager: {project.project_manager}</h5>
-                            <p className="card-text text-secondary text-small">{project.description}</p>
-                          </AccordionItem>
-                        ))}
-                        {user.projects.map((project) => (
-                          <AccordionItem
-                            unique={random('lower')}
-                            key={project.id}
-                            id={project.id}
-                            title={project.title}
-                            button="View project Details"
-                            link={`/projects/${project.id}`}
-                            bg="secondary"
-                          >
-                            <h5 className="card-title">Project Manager: {project.project_manager}</h5>
-                            <p className="card-text text-secondary text-small">{project.description}</p>
-                          </AccordionItem>
-                        ))}
-                      </>
-                    ) : (
-                      <p className="col-10 text-center mt-4 mr-auto">No projects Involved in.</p>
-                    )}
+                    {user.role === 'projectmanager' ? (
+                      <div className="col-12">
+                        <h4 className="text-muted mb-4 mt-2 text-center">Managed projects</h4>
+                        {user.managedProjects.length > 0 ? (
+                          <>
+                            {user.managedProjects.map((project) => (
+                              <AccordionItem
+                                unique={random('lower')}
+                                key={project.id}
+                                id={project.id}
+                                title={project.title}
+                                button="View project Details"
+                                link={`/projects/${project.id}`}
+                                bg="primary"
+                              >
+                                <h5 className="card-title">Project Manager: {project.project_manager}</h5>
+                                <p className="card-text text-secondary text-small">{project.description}</p>
+                              </AccordionItem>
+                            ))}
+                          </>
+                        ) : (
+                          <p className="text-center">No managed projects</p>
+                        )}
+                      </div>
+                    ) : null}
+                    <div className="col-12">
+                      <h4 className="text-muted mb-4 mt-2 text-center">Involved projects</h4>
+                      {user.projects.length > 0 ? (
+                        <>
+                          {user.projects.map((project) => (
+                            <AccordionItem
+                              unique={random('lower')}
+                              key={project.id}
+                              id={project.id}
+                              title={project.title}
+                              button="View project Details"
+                              link={`/projects/${project.id}`}
+                              bg="secondary"
+                            >
+                              <h5 className="card-title">Project Manager: {project.project_manager}</h5>
+                              <p className="card-text text-secondary text-small">{project.description}</p>
+                            </AccordionItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p className="text-center">No involved projects</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

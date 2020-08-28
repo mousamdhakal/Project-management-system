@@ -61,7 +61,6 @@ export const getUserData = (history) => {
       })
       .catch((err) => {
         //  If the token has expired logout and clear user data
-        console.log('login again');
         dispatch(setLogInMessage('Token expired. Please login Again'));
         localStorage.removeItem('jwtToken');
         setAuthorizationToken(false);

@@ -33,25 +33,58 @@ function Tasks() {
             <div className="row">
               <div className="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 {/* Project details */}
-                <h4 className="text-muted mb-4 mt-2 text-center">Assigned tasks</h4>
                 <div id="accordion">
                   <div className="row">
-                    {user.tasks.map((task) => (
-                      <AccordionItem
-                        unique={random('lower')}
-                        key={task.id}
-                        id={task.id}
-                        title={task.title}
-                        bg="primary"
-                        button="View task"
-                        link={`/tasks/${task.id}`}
-                      >
-                        <h5 className="card-title">
-                          Task Deadline: {`${new Date(task.deadline).toLocaleDateString()}`}
-                        </h5>
-                        <p className="card-text text-secondary text-small">{task.description}</p>
-                      </AccordionItem>
-                    ))}
+                    <div className="col-12">
+                      <h4 className="text-muted mb-4 mt-2 text-center">Assigned tasks</h4>
+                      {user.assignedTasks.length > 0 ? (
+                        <>
+                          {user.assignedTasks.map((task) => (
+                            <AccordionItem
+                              unique={random('lower')}
+                              key={task.id}
+                              id={task.id}
+                              title={task.title}
+                              bg="primary"
+                              button="View task"
+                              link={`/tasks/${task.id}`}
+                            >
+                              <h5 className="card-title">
+                                Task Deadline: {`${new Date(task.deadline).toLocaleDateString()}`}
+                              </h5>
+                              <p className="card-text text-secondary text-small">{task.description}</p>
+                            </AccordionItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p className="text-center">No assigned projects</p>
+                      )}
+                    </div>
+                    <div className="col-12">
+                      <h4 className="text-muted mb-4 mt-2 text-center">Tagged tasks</h4>
+                      {user.tasks.length > 0 ? (
+                        <>
+                          {user.tasks.map((task) => (
+                            <AccordionItem
+                              unique={random('lower')}
+                              key={task.id}
+                              id={task.id}
+                              title={task.title}
+                              bg="secondary"
+                              button="View task"
+                              link={`/tasks/${task.id}`}
+                            >
+                              <h5 className="card-title">
+                                Task Deadline: {`${new Date(task.deadline).toLocaleDateString()}`}
+                              </h5>
+                              <p className="card-text text-secondary text-small">{task.description}</p>
+                            </AccordionItem>
+                          ))}
+                        </>
+                      ) : (
+                        <p className="text-center">No tagged projects</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

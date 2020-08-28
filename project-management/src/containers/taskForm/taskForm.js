@@ -17,7 +17,7 @@ function TaskForm(props) {
   const TaskSchema = Yup.object().shape({
     title: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required'),
 
-    description: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+    description: Yup.string().min(2, 'Too Short!').required('Required'),
 
     associated_project: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
 
@@ -36,12 +36,11 @@ function TaskForm(props) {
       }}
       validationSchema={TaskSchema}
       onSubmit={(values, actions) => {
-        console.log('submitted');
-        // if (!info) {
-        dispatch(TaskActions.fetchNewTask(props.url, JSON.stringify(values, null, 2)));
-        // } else {
-        // dispatch(projectsActions.updateProjectById(props.url, JSON.stringify(values, null, 2)));
-        // }
+        if (!info) {
+          dispatch(TaskActions.fetchNewTask(props.url, JSON.stringify(values, null, 2)));
+        } else {
+          dispatch(TaskActions.updateTaskById(props.url, JSON.stringify(values, null, 2)));
+        }
         actions.setSubmitting(false);
       }}
     >

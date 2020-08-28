@@ -33,6 +33,14 @@ export const createNewTask = (task) => {
   });
 };
 
+export const createNewComment = (comment) => {
+  return axios.post(`${BASE_URL}/comments`, comment, {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
 export const getAllUsers = () => {
   return axios.get(`${BASE_URL}/users`);
 };
@@ -45,13 +53,37 @@ export const getItemById = (url) => {
   return axios.get(`${BASE_URL}${url}`);
 };
 
-export const updateProject = (url, project) => {
-  return axios.put(`${BASE_URL}${url}`, project, {
+export const updateItem = (url, item) => {
+  return axios.put(`${BASE_URL}${url}`, item, {
     headers: {
       'content-type': 'application/json',
     },
   });
 };
+
+export const deleteUser = (id) => {
+  return axios.delete(`${BASE_URL}/users/${id}`);
+};
+
+export const deleteProject = (id) => {
+  return axios.delete(`${BASE_URL}/projects/${id}`);
+};
+
+// export const updateTask = (url, task) => {
+//   return axios.put(`${BASE_URL}${url}`, task, {
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//   });
+// };
+
+// export const updateComment = (url, commetn) => {
+//   return axios.put(`${BASE_URL}${url}`, comment, {
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//   });
+// };
 
 export const getThisUser = () => {
   return axios.get(`${BASE_URL}/users/this`);

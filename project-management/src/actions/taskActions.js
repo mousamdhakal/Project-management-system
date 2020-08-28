@@ -1,4 +1,4 @@
-import { getItemById, createNewTask } from '../services/http';
+import { getItemById, createNewTask, updateItem } from '../services/http';
 import { fetchProjectById } from './projectsActions';
 
 export const SET_TASK = 'SET_TASK';
@@ -36,7 +36,10 @@ export const fetchNewTask = (url, task) => {
     createNewTask(task)
       .then((res) => {
         dispatch(fetchProjectById(url));
-        dispatch(clearTaskFormMessage());
+        dispatch(setTaskFormMessage('Task create successfully'));
+        setTimeout(() => {
+          dispatch(clearTaskFormMessage());
+        }, 5000);
       })
       .catch((err) => {
         if (err.response) {
@@ -44,6 +47,38 @@ export const fetchNewTask = (url, task) => {
             ? err.response.data.error.details[0].message
             : err.response.data.error.message;
           dispatch(setTaskFormMessage(error));
+          setTimeout(() => {
+            dispatch(clearTaskFormMessage());
+          }, 5000);
+        } else {
+          dispatch(setTaskFormMessage('Error creating the task'));
+          setTimeout(() => {
+            dispatch(clearTaskFormMessage());
+          }, 5000);
+        }
+      });
+  };
+};
+
+export const updateTaskById = (url, task) => {
+  return (dispatch) => {
+    updateItem(url, task)
+      .then((res) => {
+        dispatch(fetchTaskById(url));
+        dispatch(setTaskFormMessage('Updated successfully'));
+        setTimeout(() => {
+          dispatch(clearTaskFormMessage());
+        }, 5000);
+      })
+      .catch((err) => {
+        if (err.response) {
+          let error = err.response.data.error.details
+            ? err.response.data.error.details[0].message
+            : err.response.data.error.message;
+          dispatch(setTaskFormMessage(error));
+          setTimeout(() => {
+            dispatch(clearTaskFormMessage());
+          }, 5000);
         } else {
           console.log(err);
         }

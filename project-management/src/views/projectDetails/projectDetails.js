@@ -33,73 +33,73 @@ class ProjectDetails extends Component {
   render() {
     return (
       <div>
-        {this.props.project ? (
+        {this.props.project && this.props.user ? (
           <section>
-            <div className="container-fluid">
+            <div className="container">
               <div className="row">
                 <div className="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                   <h3 className="text-muted text-center mt-2 mb-4">
                     Project
-                    <button
-                      className="btn btn-info btn-lg float-right"
-                      data-toggle="modal"
-                      data-target="#createProject"
-                    >
-                      Edit project
-                    </button>
+                    {this.props.user.role === 'admin' || this.props.user.role === 'projectmanager' ? (
+                      <button
+                        className="btn btn-info btn-lg float-right"
+                        data-toggle="modal"
+                        data-target="#editProject"
+                      >
+                        Edit project
+                      </button>
+                    ) : null}
                   </h3>
-                  <ModalForm id="createProject" title="Create New Project">
+                  <ModalForm id="editProject" title="Edit Project">
                     <ProjectForm url={this.props.location.pathname} info={() => this.info()} />
                   </ModalForm>
                   <ModalForm id="addTask" title="Add New Task to the project">
                     <TaskForm url={this.props.location.pathname} project={this.props.project.id} />
                   </ModalForm>
-                  <div className="container">
-                    <div className="card">
-                      <div className="card-header">
-                        <h3>{this.props.project.title}</h3>
+                  <div className="card">
+                    <div className="card-header">
+                      <h3>{this.props.project.title}</h3>
+                    </div>
+                    <div className="card-body">
+                      <h4 className="mb-3">Project Manager : {this.props.project.project_manager}</h4>
+                      <div className="project-description">
+                        <h5 className="card-title">Description</h5>
+                        <p className="card-text">{this.props.project.description}</p>
                       </div>
-                      <div className="card-body">
-                        <h4 className="mb-3">Project Manager : {this.props.project.project_manager}</h4>
-                        <div className="project-description">
-                          <h5 className="card-title">Description</h5>
-                          <p className="card-text">{this.props.project.description}</p>
-                        </div>
-                        <ul className="list-group list-group-flush">
-                          <h5 className="my-3 ml-3">Tasks:</h5>
-                          {this.props.project.tasks.length > 0 ? (
-                            this.props.project.tasks.map((task, index) => (
-                              <Link
-                                to={{ pathname: `/tasks/${task.id}` }}
-                                key={index}
-                                className="projects-task bg-info"
-                              >
-                                <li className="list-group-item project-task-text">
-                                  {index + 1} ) {task.title}
-                                </li>
-                              </Link>
-                            ))
-                          ) : (
-                            <p className="ml-3">No tasks in the project.</p>
-                          )}
-                        </ul>
-                        <ul className="list-group user-group mb-4 mt-2">
-                          <h5 className="my-3 ml-3">Users:</h5>
-                          {this.props.project.users.length > 0 ? (
-                            this.props.project.users.map((user, index) => (
-                              <li key={index} className="list-group-item project-user-text">
-                                {index + 1} ) {user.first_name} {user.last_name} ({user.username})
+                      <ul className="list-group list-group-flush">
+                        <h5 className="my-3 ml-3">Tasks:</h5>
+                        {this.props.project.tasks.length > 0 ? (
+                          this.props.project.tasks.map((task, index) => (
+                            <Link to={{ pathname: `/tasks/${task.id}` }} key={index} className="projects-task bg-info">
+                              <li className="list-group-item project-task-text">
+                                {index + 1} ) {task.title}
                               </li>
-                            ))
-                          ) : (
-                            <p className="ml-3">No users in the project.</p>
-                          )}
-                        </ul>
-                        <div className="text-center col-6">
+                            </Link>
+                          ))
+                        ) : (
+                          <p className="ml-3">No tasks in the project.</p>
+                        )}
+                      </ul>
+                      <ul className="list-group user-group mb-4 mt-2">
+                        <h5 className="my-3 ml-3">Users:</h5>
+                        {this.props.project.users.length > 0 ? (
+                          this.props.project.users.map((user, index) => (
+                            <li key={index} className="list-group-item project-user-text">
+                              {index + 1} ) {user.first_name} {user.last_name} ({user.username})
+                            </li>
+                          ))
+                        ) : (
+                          <p className="ml-3">No users in the project.</p>
+                        )}
+                      </ul>
+                      <div className="text-center col-6">
+                        {this.props.user.role === 'admin' ||
+                        this.props.user.role === 'projectmanager' ||
+                        this.props.user.role === 'teamlead' ? (
                           <button className="btn btn-info btn-lg" data-toggle="modal" data-target="#addTask">
                             Add Task
                           </button>
-                        </div>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -118,7 +118,7 @@ class ProjectDetails extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return { project: state.projects.project };
+  return { project: state.projects.project, user: state.user.user };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -10,7 +10,6 @@ import Login from './views/login/login';
 import App from './App';
 import Projects from './views/projects/projects';
 import Tasks from './views/tasks/tasks';
-import Comments from './views/comments/comments';
 import UsersTable from './views/usersTable/usersTable';
 import ProjectsTable from './views/projectstable/projectsTable';
 import projectDetails from './views/projectDetails/projectDetails';
@@ -26,7 +25,6 @@ const Routes = () => (
           <Route path="/tasks/:id" component={withAuthenticated(taskDetails)}></Route>
           <Route path="/projects" component={withAuthenticated(Projects)}></Route>
           <Route path="/tasks" component={withAuthenticated(Tasks)}></Route>
-          <Route path="/comments" component={withAuthenticated(Comments)}></Route>
           <Route path="/userstable" component={withAuthenticated(withRoles(UsersTable, ['admin']))}></Route>
           <Route
             path="/projectstable"
