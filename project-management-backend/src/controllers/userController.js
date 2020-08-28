@@ -136,6 +136,12 @@ function login(req, res, next) {
  * @param {Function} next
  */
 function update(req, res, next) {
+  // Hash the password to store in database
+  if (req.body.password) {
+    const salt = genSaltSync(10);
+    req.body.password = hashSync(req.body.password, salt);
+  }
+
   updateUser(req.params.id, req.body)
     .then((data) => {
       data.attributes.password = undefined;

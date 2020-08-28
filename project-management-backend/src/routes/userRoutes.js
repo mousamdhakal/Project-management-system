@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const { fetchAll, fetchById, fetchByToken, create, update, remove, login } = require('../controllers/userController');
-const { findUser, userValidator } = require('../validators/userValidator');
+const { findUser, userValidator, updateValidator } = require('../validators/userValidator');
 const authenticate = require('../middlewares/authenticate');
 const authorize = require('../middlewares/authorize');
 const roles = require('../utils/roles');
@@ -36,7 +36,7 @@ router.post('/login', login);
 /**
  * PUT /api/users/:id
  */
-router.put('/:id', authenticate, authorize([roles[0]]), findUser, userValidator, update);
+router.put('/:id', authenticate, authorize([roles[0]]), findUser, updateValidator, update);
 
 /**
  * DELETE /api/users/:id

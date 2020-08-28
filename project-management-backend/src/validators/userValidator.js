@@ -7,7 +7,7 @@ const { getUser } = require('../services/userService.js');
 const schema = Joi.object({
   username: Joi.string().max(90).required(),
   first_name: Joi.string().max(50).required(),
-  last_name: Joi.string().max(50),
+  last_name: Joi.string().max(50).required(),
   password: Joi.string()
     .pattern(new RegExp('^(?=.*?[a-z])(?=.*?[0-9]).{8,}$'))
     .message('Password must contain at least 8 characters including one letter and one number')
@@ -16,8 +16,20 @@ const schema = Joi.object({
   role: Joi.string().max(50),
 });
 
+// Validation schema
+const updateSchema = Joi.object({
+  username: Joi.string().max(90).required(),
+  first_name: Joi.string().max(50),
+  last_name: Joi.string().max(50),
+  password: Joi.string()
+    .pattern(new RegExp('^(?=.*?[a-z])(?=.*?[0-9]).{8,}$'))
+    .message('Password must contain at least 8 characters including one letter and one number')
+    .max(90),
+  role: Joi.string().max(50),
+});
+
 /**
- * Validate create/update user request.
+ * Validate create user request.
  *
  * @param   {Object}   req
  * @param   {Object}   res
@@ -26,6 +38,20 @@ const schema = Joi.object({
  */
 function userValidator(req, res, next) {
   return validate(req.body, schema)
+    .then(() => next())
+    .catch((err) => next(err));
+}
+
+/**
+ * Validate update user request.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
+function updateValidator(req, res, next) {
+  return validate(req.body, updateSchema)
     .then(() => next())
     .catch((err) => next(err));
 }
@@ -44,4 +70,4 @@ function findUser(req, res, next) {
     .catch((err) => next(err));
 }
 
-module.exports = { findUser, userValidator };
+module.exports = { findUser, userValidator, updateValidator };

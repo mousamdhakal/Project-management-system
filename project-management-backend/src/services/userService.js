@@ -66,12 +66,9 @@ function createUser(user) {
  * @returns {Promise}
  */
 function updateUser(id, user) {
-  return new User({ id }).save({
-    username: user.username,
-    first_name: user.first_name,
-    last_name: user.last_name,
-    role: user.role,
-    password: user.password,
+  return new User({ id }).save(user, {
+    method: 'update',
+    patch: true,
   });
 }
 

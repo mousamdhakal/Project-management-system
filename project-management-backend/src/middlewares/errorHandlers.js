@@ -60,7 +60,7 @@ function bodyParserHandler(err, req, res, next) {
  * @param  {Function} next
  */
 function genericErrorHandler(err, req, res, next) {
-  // console.log(err);
+  console.log(err);
   const error = buildError(err);
   res.status(error.code).json({ error });
 }

@@ -96,31 +96,29 @@ function createTask(task) {
  */
 function updateTask(id, task) {
   return new Promise((resolve, reject) => {
+    let users = task.users;
+    task.users = undefined;
     new Task({ id })
-      .save({
-        title: task.title,
-        description: task.description,
-        assigned_user: task.assigned_user,
-        previously_assigned_user: task.previously_assigned_user,
-        associated_project: task.associated_project,
-        deadline: task.deadline,
-      })
+      .save(task, { method: 'update', patch: true })
       .then((data) => {
-        data
-          .taggedUsers()
-          .detach()
-          .then((result) => {
-            data
-              .taggedUsers()
-              .attach(task.users)
-              .then((result) => resolve(data))
-              .catch((err) => {
-                throw err;
-              });
-          })
-          .catch((err) => {
-            throw err;
-          });
+        if (users) {
+          data
+            .taggedUsers()
+            .detach()
+            .then((result) => {
+              data
+                .taggedUsers()
+                .attach(users)
+                .then((result) => resolve(data))
+                .catch((err) => {
+                  throw err;
+                });
+            })
+            .catch((err) => {
+              throw err;
+            });
+        }
+        resolve(data);
       })
       .catch((err) => reject(Boom.notAcceptable('Invalid data for updating task')));
   });

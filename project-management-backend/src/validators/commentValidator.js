@@ -1,7 +1,10 @@
 const Joi = require('@hapi/joi');
+const Boom = require('@hapi/boom');
 
 const validate = require('../utils/validate');
 const { getComment } = require('../services/commentService');
+const { getProject } = require('../services/projectService');
+const { getTask } = require('../services/taskService');
 
 // Validation schema
 const schema = Joi.object({
@@ -25,17 +28,51 @@ function commentValidator(req, res, next) {
 }
 
 /**
- * Validate comment's existence.
+ * Validate comment's ownership.
  *
  * @param   {Object}   req
  * @param   {Object}   res
  * @param   {Function} next
  * @returns {Promise}
  */
-function findComment(req, res, next) {
+function validateCommentOwnership(req, res, next) {
   return getComment(req.params.id)
-    .then(() => next())
+    .then((comment) => {
+      if (comment.attributes.username === req.user.username) {
+        return next();
+      }
+      return next(Boom.unauthorized('Comment does not belong to the user'));
+    })
     .catch((err) => next(err));
 }
 
-module.exports = { findComment, commentValidator };
+/**
+ * Validate comment's is in a involved project.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
+function validateProjectInvolvement(req, res, next) {
+  return getTask(req.body.task)
+    .then((task) => {
+      let isInvolved = false;
+      getProject(task.relations.project.attributes.id)
+        .then((project) => {
+          project.relations.users.models.forEach((modal) => {
+            if (modal.attributes.id === req.user.id) {
+              isInvolved = true;
+            }
+          });
+        })
+        .catch((err) => {
+          throw err;
+        });
+      if (isInvolved) return next();
+      return next(Boom.unauthorized('User is not involved in the project of the task'));
+    })
+    .catch((err) => next(Boom.notFound('Task being commented on does not exists')));
+}
+
+module.exports = { commentValidator, validateCommentOwnership, validateProjectInvolvement };

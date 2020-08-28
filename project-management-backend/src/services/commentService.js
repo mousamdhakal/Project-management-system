@@ -65,11 +65,7 @@ function createComment(comment) {
  * @returns {Promise}
  */
 function updateComment(id, comment) {
-  return new Comment({ id }).save({
-    text: comment.text,
-    user: comment.user,
-    task: comment.task,
-  });
+  return new Comment({ id }).save(comment, { method: 'update', patch: true });
 }
 
 /**

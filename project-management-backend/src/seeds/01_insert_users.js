@@ -31,7 +31,7 @@ exports.seed = function (knex) {
       username: 'naya',
       first_name: 'new',
       last_name: 'new',
-      role: 'engine',
+      role: 'engineer',
       password: '$2b$10$k74TJ49WCTJIfdtSGjvnauAmpLxPWQTalA6gdwhiw.g5vulkfTdzi',
       created_at: new Date(),
     },

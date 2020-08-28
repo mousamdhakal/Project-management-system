@@ -102,30 +102,31 @@ function createProject(project) {
  */
 function updateProject(id, project) {
   return new Promise((resolve, reject) => {
+    let users = project.users;
+    project.users = undefined;
     new Project({ id })
-      .save({
-        title: project.title,
-        description: project.description,
-        project_manager: project.project_manager,
-      })
+      .save(project, { method: 'update', patch: true })
       .then((data) => {
-        data
-          .users()
-          .detach()
-          .then((result) => {
-            data
-              .users()
-              .attach(project.users)
-              .then((result) => resolve(data))
-              .catch((err) => {
-                throw err;
-              });
-          })
-          .catch((err) => {
-            throw err;
-          });
+        if (users) {
+          data
+            .users()
+            .detach()
+            .then((result) => {
+              data
+                .users()
+                .attach(users)
+                .then((result) => resolve(data))
+                .catch((err) => {
+                  throw err;
+                });
+            })
+            .catch((err) => {
+              throw err;
+            });
+        }
+        resolve(data);
       })
-      .catch((err) => reject(Boom.notAcceptable('Invalid data for updating project')));
+      .catch((err) => reject(err));
   });
 }
 
