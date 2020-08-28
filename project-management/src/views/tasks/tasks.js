@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
@@ -11,10 +11,15 @@ import './tasks.css';
 
 function Tasks() {
   let user = useSelector((state) => state.user.user);
+  let active = useSelector((state) => state.ui.active);
   let history = useHistory();
   const dispatch = useDispatch();
 
-  dispatch(uiActions.setActive('tasks'));
+  useEffect(() => {
+    if (active !== 'tasks') {
+      dispatch(uiActions.setActive('tasks'));
+    }
+  }, [active, dispatch]);
 
   if (!user) {
     history.push('/dashboard');
@@ -32,8 +37,14 @@ function Tasks() {
                 <div id="accordion">
                   <div className="row">
                     {user.tasks.map((task) => (
-                      <AccordionItem unique={random('lower')} key={task.id} id={task.id} title={task.title}>
-                        {task.description}
+                      <AccordionItem
+                        unique={random('lower')}
+                        key={task.id}
+                        id={task.id}
+                        title={task.title}
+                        bg="primary"
+                      >
+                        <p className="card-text text-secondary text-small">{task.description}</p>
                       </AccordionItem>
                     ))}
                   </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
@@ -9,10 +9,15 @@ import './comments.css';
 
 function Comments() {
   let user = useSelector((state) => state.user.user);
+  let active = useSelector((state) => state.ui.active);
   let history = useHistory();
   const dispatch = useDispatch();
 
-  dispatch(uiActions.setActive('comments'));
+  useEffect(() => {
+    if (active !== 'tasks') {
+      dispatch(uiActions.setActive('comments'));
+    }
+  }, [active, dispatch]);
 
   if (!user) {
     history.push('/dashboard');

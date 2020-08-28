@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
@@ -11,10 +11,15 @@ import AccordionItem from '../../components/accordionItem/accordionItem';
 
 function Projects() {
   let user = useSelector((state) => state.user.user);
+  let active = useSelector((state) => state.ui.active);
   let history = useHistory();
   const dispatch = useDispatch();
 
-  dispatch(uiActions.setActive('projects'));
+  useEffect(() => {
+    if (active !== 'tasks') {
+      dispatch(uiActions.setActive('projects'));
+    }
+  }, [active, dispatch]);
 
   if (!user) {
     history.push('/dashboard');
@@ -66,9 +71,7 @@ function Projects() {
                         ))}
                       </>
                     ) : (
-                      <p className="col-10 text-center mt-4" mr-auto>
-                        No projects Involved in.
-                      </p>
+                      <p className="col-10 text-center mt-4 mr-auto">No projects Involved in.</p>
                     )}
                   </div>
                 </div>
