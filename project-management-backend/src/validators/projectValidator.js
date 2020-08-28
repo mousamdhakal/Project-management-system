@@ -3,6 +3,7 @@ const Boom = require('@hapi/boom');
 
 const validate = require('../utils/validate');
 const { getProject } = require('../services/projectService');
+const { getUserByUserName } = require('../services/userService');
 
 const roles = require('../utils/roles');
 
@@ -123,4 +124,43 @@ function involvementChecker(req, res, next) {
     .catch((err) => next(err));
 }
 
-module.exports = { findProject, projectAuthorizer, projectValidator, updateValidator, involvementChecker };
+/**
+ * convert names for involved users to ids.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
+function convertNamesToIds(req, res, next) {
+  if (req.body.users) {
+    let promises = [];
+    req.body.users.forEach((username) => {
+      if (username) {
+        promises.push(getUserByUserName(username));
+      }
+    });
+    Promise.all(promises)
+      .then((users) => {
+        req.body.users = [];
+        users.forEach((user, index) => {
+          req.body.users.push(user.id);
+        });
+        next();
+      })
+      .catch((err) => {
+        next(Boom.notAcceptable('Invalid list of users sent'));
+      });
+  } else {
+    next();
+  }
+}
+
+module.exports = {
+  findProject,
+  projectAuthorizer,
+  projectValidator,
+  updateValidator,
+  involvementChecker,
+  convertNamesToIds,
+};
