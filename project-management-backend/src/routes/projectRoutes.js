@@ -12,6 +12,7 @@ const {
   projectAuthorizer,
   projectValidator,
   updateValidator,
+  projectManagerValidator,
   convertNamesToIds,
 } = require('../validators/projectValidator');
 
@@ -38,12 +39,20 @@ router.get('/:id', authorize([roles[0], roles[1], roles[2], roles[3]]), projectA
 /**
  * POST /api/projects
  */
-router.post('/', authorize([roles[0]]), projectValidator, convertNamesToIds, create);
+router.post('/', authorize([roles[0]]), projectValidator, projectManagerValidator, convertNamesToIds, create);
 
 /**
  * PUT /api/projects/:id
  */
-router.put('/:id', authorize([roles[0], roles[1]]), projectAuthorizer, updateValidator, convertNamesToIds, update);
+router.put(
+  '/:id',
+  authorize([roles[0], roles[1]]),
+  projectAuthorizer,
+  updateValidator,
+  projectManagerValidator,
+  convertNamesToIds,
+  update
+);
 
 /**
  * DELETE /api/projects/:id

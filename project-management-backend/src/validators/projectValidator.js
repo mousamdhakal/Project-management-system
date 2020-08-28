@@ -103,6 +103,30 @@ function projectAuthorizer(req, res, next) {
  * @param   {Function} next
  * @returns {Promise}
  */
+function projectManagerValidator(req, res, next) {
+  if (!req.body.project_manager) {
+    next();
+  }
+  getUserByUserName(req.body.project_manager)
+    .then((user) => {
+      if (user.role !== roles[1]) {
+        return next(Boom.notAcceptable('Only project Managers can be assigned a project'));
+      }
+      return next();
+    })
+    .catch((err) => {
+      return next(Boom.notFound('Specified project Manager not found in the system'));
+    });
+}
+
+/**
+ * Validate project's existence and otehr permission for update.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
 function involvementChecker(req, res, next) {
   return getProject(req.params.id)
     .then((project) => {
@@ -160,6 +184,7 @@ module.exports = {
   findProject,
   projectAuthorizer,
   projectValidator,
+  projectManagerValidator,
   updateValidator,
   involvementChecker,
   convertNamesToIds,

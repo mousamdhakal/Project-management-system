@@ -80,7 +80,7 @@ function createTask(task) {
           .attach(task.users)
           .then((result) => resolve(data))
           .catch((err) => {
-            throw err;
+            reject(Boom.notAcceptable('Task created , but users not tagged due to invalid input'));
           });
       })
       .catch((err) => reject(Boom.notAcceptable('Invalid data for creating task')));
