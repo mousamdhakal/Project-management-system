@@ -2,6 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
+import random from 'random-string-generator';
+import AccordionItem from '../../components/accordionItem/accordionItem';
 
 import * as uiActions from '../../actions/uiActions';
 
@@ -24,9 +26,17 @@ function Tasks() {
         <section>
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-10 col-lg-9 col-md-8 ml-auto">
-                <div className="jumbotron pt-md-5 mt-md-3 dashboard-jumbotron">
-                  <h1 className="display-4">Your tasks</h1>
+              <div className="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
+                {/* Project details */}
+                <h4 className="text-muted mb-4 mt-2 text-center">Assigned tasks</h4>
+                <div id="accordion">
+                  <div className="row">
+                    {user.tasks.map((task) => (
+                      <AccordionItem unique={random('lower')} key={task.id} id={task.id} title={task.title}>
+                        {task.description}
+                      </AccordionItem>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

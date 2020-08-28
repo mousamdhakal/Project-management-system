@@ -34,6 +34,12 @@
   transform: translateY(-1px);
 }
 
+.user-role {
+  display: block;
+  text-align: center;
+  font-size: 1rem;
+}
+
 @media(max-width: 768px){
   .sidebar {
     position: static;

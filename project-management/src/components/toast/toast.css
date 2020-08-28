@@ -1,0 +1,12 @@
+.toast-wrapper {
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+  min-height: 300px;
+}
+
+.toast-content {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
