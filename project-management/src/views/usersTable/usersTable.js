@@ -33,7 +33,7 @@ class UsersTable extends Component {
                   <ModalForm id="createUser" title="Create New user">
                     <UserForm />
                   </ModalForm>
-                  <div className="table-responsive">
+                  <div className="table-responsive-lg">
                     <table className="table table bg-light text-center">
                       <thead>
                         <tr className="text-muted">

@@ -12,10 +12,10 @@ function projectsReducers(state = INITIAL_STATE, action) {
     case projectsActions.SET_PROJECTS:
       return { ...state, projects: action.payload };
 
-    case projectsActions.SET_FORM_MESSAGE:
+    case projectsActions.SET_PROJECT_FORM_MESSAGE:
       return { ...state, formMessage: action.payload };
 
-    case projectsActions.CLEAR_FORM_MESSAGE:
+    case projectsActions.CLEAR_PROJECT_FORM_MESSAGE:
       return { ...state, formMessage: null };
 
     case userActions.REMOVE_USER:

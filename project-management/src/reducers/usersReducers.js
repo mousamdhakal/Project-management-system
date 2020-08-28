@@ -12,10 +12,10 @@ function usersReducers(state = INITIAL_STATE, action) {
     case usersActions.SET_USERS:
       return { ...state, users: action.payload };
 
-    case usersActions.SET_FORM_MESSAGE:
+    case usersActions.SET_USER_FORM_MESSAGE:
       return { ...state, formMessage: action.payload };
 
-    case usersActions.CLEAR_FORM_MESSAGE:
+    case usersActions.CLEAR_USER_FORM_MESSAGE:
       return { ...state, formMessage: null };
 
     case userActions.REMOVE_USER:

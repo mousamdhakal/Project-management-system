@@ -17,6 +17,14 @@ export const createNewUser = (user) => {
   });
 };
 
+export const createNewProject = (project) => {
+  return axios.post(`${BASE_URL}/projects`, project, {
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+};
+
 export const getAllUsers = () => {
   return axios.get(`${BASE_URL}/users`);
 };

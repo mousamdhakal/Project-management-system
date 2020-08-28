@@ -7,6 +7,7 @@ import * as projectsActions from '../../actions/projectsActions';
 import * as uiActions from '../../actions/uiActions';
 
 import ModalForm from '../../components/modalForm/modalForm';
+import ProjectForm from '../../containers/projectForm/projectForm';
 // import UserForm from '../../containers/userForm/userForm';
 
 class ProjectsTable extends Component {
@@ -34,9 +35,9 @@ class ProjectsTable extends Component {
                     </button>
                   </h3>
                   <ModalForm id="createProject" title="Create New user">
-                    {/* <UserForm /> */}
+                    <ProjectForm />
                   </ModalForm>
-                  <div className="table-responsive">
+                  <div className="table-responsive-lg">
                     <table className="table table bg-light text-center">
                       <thead>
                         <tr className="text-muted">

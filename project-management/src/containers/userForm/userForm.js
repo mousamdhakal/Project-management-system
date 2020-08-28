@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import * as usersActions from '../../actions/usersActions';
 
-function UserForm(props, operation) {
+function UserForm() {
   const dispatch = useDispatch();
   let message = useSelector((state) => state.users.formMessage);
 
