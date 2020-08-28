@@ -69,6 +69,10 @@ export const deleteProject = (id) => {
   return axios.delete(`${BASE_URL}/projects/${id}`);
 };
 
+export const deleteTask = (id) => {
+  return axios.delete(`${BASE_URL}/tasks/${id}`);
+};
+
 // export const updateTask = (url, task) => {
 //   return axios.put(`${BASE_URL}${url}`, task, {
 //     headers: {

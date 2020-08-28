@@ -1,9 +1,20 @@
-import { getItemById, createNewTask, updateItem } from '../services/http';
+import { getItemById, createNewTask, updateItem, deleteTask } from '../services/http';
 import { fetchProjectById } from './projectsActions';
 
 export const SET_TASK = 'SET_TASK';
 export const SET_TASK_FORM_MESSAGE = 'SET_TASK_FORM_MESSAGE';
 export const CLEAR_TASK_FORM_MESSAGE = 'CLEAR_TASK_FORM_MESSAGE';
+export const SET_TASK_DELETE_MESSAGE = 'SET_TASK_DELETE_MESSAGE';
+export const CLEAR_TASK_DELETE_MESSAGE = 'CLEAR_TASK_DELETE_MESSAGE';
+
+export const setTaskDeleteMessage = (message) => ({
+  type: SET_TASK_DELETE_MESSAGE,
+  payload: message,
+});
+
+export const clearTaskDeleteMessage = () => ({
+  type: CLEAR_TASK_DELETE_MESSAGE,
+});
 
 export const setTask = (task) => ({
   type: SET_TASK,
@@ -82,6 +93,19 @@ export const updateTaskById = (url, task) => {
         } else {
           console.log(err);
         }
+      });
+  };
+};
+
+export const deleteATask = (id, history) => {
+  console.log(id, history);
+  return (dispatch) => {
+    deleteTask(id)
+      .then((res) => {
+        history.push('/dashboard');
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 };

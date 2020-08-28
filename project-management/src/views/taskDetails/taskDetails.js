@@ -35,7 +35,7 @@ class TaskDetails extends Component {
   render() {
     return (
       <div>
-        {this.props.task ? (
+        {this.props.task && this.props.user ? (
           <section>
             <div className="container-fluid">
               <div className="row">
@@ -94,6 +94,16 @@ class TaskDetails extends Component {
                         <button className="btn btn-info btn-lg" data-toggle="modal" data-target="#addComment">
                           Add comment
                         </button>
+                        {this.props.user.role === 'admin' ||
+                        this.props.user.role === 'projectmanager' ||
+                        this.props.user.role === 'teamlead' ? (
+                          <button
+                            className="btn btn-info btn-lg float-right"
+                            onClick={() => this.props.deleteTask(this.props.task.id, this.props.history)}
+                          >
+                            Delete task
+                          </button>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -118,6 +128,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getTask: (url) => dispatch(taskActions.fetchTaskById(url)),
+    deleteTask: (id) => dispatch(taskActions.deleteATask(id)),
     setActive: (page) => dispatch(uiActions.setActive(page)),
   };
 };
