@@ -109,7 +109,7 @@ function projectManagerValidator(req, res, next) {
   }
   getUserByUserName(req.body.project_manager)
     .then((user) => {
-      if (user.role !== roles[1]) {
+      if (user.attributes.role !== roles[1]) {
         return next(Boom.notAcceptable('Only project Managers can be assigned a project'));
       }
       return next();

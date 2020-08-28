@@ -9,7 +9,6 @@ const { getTask } = require('../services/taskService');
 // Validation schema
 const schema = Joi.object({
   text: Joi.string().max(500).required(),
-  user: Joi.string().max(90).required(),
   task: Joi.string().max(90).required(),
 });
 
@@ -76,20 +75,23 @@ function validateCommentOwnership(req, res, next) {
 function validateProjectInvolvement(req, res, next) {
   return getTask(req.body.task)
     .then((task) => {
-      let isInvolved = false;
-      getProject(task.relations.project.attributes.id)
+      return getProject(task.relations.project.attributes.id)
         .then((project) => {
+          let isInvolved = false;
           project.relations.users.models.forEach((modal) => {
             if (modal.attributes.id === req.user.id) {
               isInvolved = true;
             }
           });
+          if (project.attributes.project_manager === req.user.username) {
+            isInvolved = true;
+          }
+          if (isInvolved) return next();
+          return next(Boom.unauthorized('User is not involved in the project of the task'));
         })
         .catch((err) => {
           throw err;
         });
-      if (isInvolved) return next();
-      return next(Boom.unauthorized('User is not involved in the project of the task'));
     })
     .catch((err) => next(Boom.notFound('Task being commented on does not exists')));
 }

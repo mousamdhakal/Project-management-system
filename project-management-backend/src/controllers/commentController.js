@@ -65,6 +65,7 @@ function create(req, res, next) {
 
   // Get unique id for the task
   body.id = uuidv4();
+  body.user = req.user.username;
 
   createComment(req.body)
     .then((data) => res.status(HttpStatus.CREATED).json({ data }))

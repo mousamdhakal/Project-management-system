@@ -28,7 +28,7 @@ router.get('/all', authorize([roles[0]]), fetchAll);
 /**
  * GET /api/tasks/:id
  */
-router.get('/:id', authorize([roles[0], roles[1], roles[2]]), taskAuthorizer, fetchById);
+router.get('/:id', authorize([roles[0], roles[1], roles[2], roles[3]]), taskAuthorizer, fetchById);
 
 /**
  * POST /api/tasks

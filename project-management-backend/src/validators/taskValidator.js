@@ -95,6 +95,7 @@ function taskAuthorizer(req, res, next) {
             if (data.attributes.role === roles[0] || data.attributes.role === roles[1]) {
               invalid = true;
             }
+
             if (invalid) {
               return next(Boom.notAcceptable('Not allowed to assign task to the user of given role'));
             }
@@ -176,10 +177,6 @@ function validateAssignUpdate(req, res, next) {
 }
 
 function taskCreationAuthorizer(req, res, next) {
-  if (req.user.role === roles[0]) {
-    return next();
-  }
-
   // Check if task is assigned to valid user
   if (req.body.assigned_user) {
     let invalid = false;
@@ -189,6 +186,7 @@ function taskCreationAuthorizer(req, res, next) {
         if (data.attributes.role === roles[0] || data.attributes.role === roles[1]) {
           invalid = true;
         }
+
         if (invalid) {
           return next(Boom.notAcceptable('Not allowed to assign task to the user of given role'));
         }
@@ -196,6 +194,9 @@ function taskCreationAuthorizer(req, res, next) {
       .catch((err) => {
         throw err;
       });
+  }
+  if (req.user.role === roles[0]) {
+    return next();
   }
 
   getProject(req.body.associated_project)
