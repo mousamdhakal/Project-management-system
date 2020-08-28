@@ -1,4 +1,5 @@
 import * as uiActions from '../actions/uiActions';
+import * as userActions from '../actions/userActions';
 
 // Initial state of UI
 const INITIAL_STATE = {
@@ -16,6 +17,9 @@ function uiReducers(state = INITIAL_STATE, action) {
 
     case uiActions.RESET_TOAST:
       return { ...state, toastMessage: null };
+
+    case userActions.REMOVE_USER:
+      return { ...INITIAL_STATE };
 
     default:
       return state;

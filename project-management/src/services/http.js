@@ -21,6 +21,10 @@ export const getAllUsers = () => {
   return axios.get(`${BASE_URL}/users`);
 };
 
+export const getAllProjects = () => {
+  return axios.get(`${BASE_URL}/projects/all`);
+};
+
 export const getThisUser = () => {
   return axios.get(`${BASE_URL}/users/this`);
 };

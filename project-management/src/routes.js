@@ -11,7 +11,8 @@ import App from './App';
 import Projects from './views/projects/projects';
 import Tasks from './views/tasks/tasks';
 import Comments from './views/comments/comments';
-import Users from './views/users/users';
+import UsersTable from './views/usersTable/usersTable';
+import ProjectsTable from './views/projectstable/projectsTable';
 
 const Routes = () => (
   <BrowserRouter>
@@ -22,7 +23,11 @@ const Routes = () => (
           <Route path="/projects" component={withAuthenticated(Projects)}></Route>
           <Route path="/tasks" component={withAuthenticated(Tasks)}></Route>
           <Route path="/comments" component={withAuthenticated(Comments)}></Route>
-          <Route path="/users" component={withAuthenticated(withRoles(Users, ['admin']))}></Route>
+          <Route path="/userstable" component={withAuthenticated(withRoles(UsersTable, ['admin']))}></Route>
+          <Route
+            path="/projectstable"
+            component={withAuthenticated(withRoles(ProjectsTable, ['admin', 'projectmanager']))}
+          ></Route>
           <Route path="/" component={withAuthenticated(DashBoard)}></Route>
         </Switch>
       </App>

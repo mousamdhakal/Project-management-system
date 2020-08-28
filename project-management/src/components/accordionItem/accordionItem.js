@@ -5,7 +5,7 @@ function AccordionItem(props) {
     <div className="card col-lg-8 m-auto">
       <div className="card-header">
         <button
-          className="btn btn-block bg-secondary text-light text-center"
+          className={`btn btn-block bg-${props.bg} text-light text-center`}
           data-toggle="collapse"
           data-target={`#${props.unique}`}
         >

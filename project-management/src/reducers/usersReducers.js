@@ -1,4 +1,5 @@
 import * as usersActions from '../actions/usersActions';
+import * as userActions from '../actions/userActions';
 
 //Initial state of users
 const INITIAL_STATE = {
@@ -16,6 +17,9 @@ function usersReducers(state = INITIAL_STATE, action) {
 
     case usersActions.CLEAR_FORM_MESSAGE:
       return { ...state, formMessage: null };
+
+    case userActions.REMOVE_USER:
+      return { ...INITIAL_STATE };
 
     default:
       return state;

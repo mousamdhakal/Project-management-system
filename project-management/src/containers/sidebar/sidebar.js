@@ -60,7 +60,7 @@ function Sidebar() {
         />
         <SideBarItem
           class={active === 'users' ? 'sidebar__link--current' : null}
-          link="/users"
+          link="/userstable"
           icon="fa-users"
           title="Users"
           toast={displayToast}

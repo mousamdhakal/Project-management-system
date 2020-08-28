@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 import random from 'random-string-generator';
 
@@ -28,15 +28,48 @@ function Projects() {
             <div className="row">
               <div className="col-xl-10 col-lg-9 col-md-8 ml-auto mt-5">
                 {/* Project details */}
-                <h4 className="text-muted mb-4 mt-2 text-center">Involved Projects</h4>
+                <h3 className="text-muted mb-4 mt-2 text-center">
+                  Involved Projects
+                  {user.role === 'admin' || user.role === 'projectmanager' ? (
+                    <Link to={{ pathname: '/projectstable' }}>
+                      <button className="btn btn-info btn-lg float-right">View all Projects</button>
+                    </Link>
+                  ) : null}
+                </h3>
                 <div id="accordion">
                   <div className="row">
-                    {user.projects.map((project) => (
-                      <AccordionItem unique={random('lower')} key={project.id} id={project.id} title={project.title}>
-                        <h5 className="card-title">Project Manager: {project.project_manager}</h5>
-                        <p className="card-text text-secondary text-small">{project.description}</p>
-                      </AccordionItem>
-                    ))}
+                    {user.projects.length > 0 || user.managedProjects.length > 0 ? (
+                      <>
+                        {user.managedProjects.map((project) => (
+                          <AccordionItem
+                            unique={random('lower')}
+                            key={project.id}
+                            id={project.id}
+                            title={project.title}
+                            bg="primary"
+                          >
+                            <h5 className="card-title">Project Manager: {project.project_manager}</h5>
+                            <p className="card-text text-secondary text-small">{project.description}</p>
+                          </AccordionItem>
+                        ))}
+                        {user.projects.map((project) => (
+                          <AccordionItem
+                            unique={random('lower')}
+                            key={project.id}
+                            id={project.id}
+                            title={project.title}
+                            bg="secondary"
+                          >
+                            <h5 className="card-title">Project Manager: {project.project_manager}</h5>
+                            <p className="card-text text-secondary text-small">{project.description}</p>
+                          </AccordionItem>
+                        ))}
+                      </>
+                    ) : (
+                      <p className="col-10 text-center mt-4" mr-auto>
+                        No projects Involved in.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

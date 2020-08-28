@@ -8,6 +8,11 @@ export default function (ComposedComponent, roles = []) {
   class RolesCheck extends Component {
     constructor(props) {
       super(props);
+
+      this.state = {
+        show: false,
+      };
+
       this.checkRoles();
     }
 
@@ -18,11 +23,13 @@ export default function (ComposedComponent, roles = []) {
         }
         const { history } = this.props;
         history.push(`/dashboard`, null);
+      } else {
+        this.state.show = true;
       }
     };
 
     render() {
-      return <ComposedComponent {...this.props} />;
+      return <>{this.state.show ? <ComposedComponent {...this.props} /> : null}</>;
     }
   }
 

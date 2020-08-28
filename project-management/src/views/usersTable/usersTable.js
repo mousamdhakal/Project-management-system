@@ -6,14 +6,12 @@ import Loader from 'react-loader-spinner';
 import * as usersActions from '../../actions/usersActions';
 import * as uiActions from '../../actions/uiActions';
 
-import './users.css';
+import './usersTable.css';
 import ModalForm from '../../components/modalForm/modalForm';
 import UserForm from '../../containers/userForm/userForm';
 
-class Users extends Component {
-  constructor(props) {
-    super(props);
-
+class UsersTable extends Component {
+  componentDidMount() {
     this.props.fetchAllUsers();
     this.props.setActive('users');
   }
@@ -35,35 +33,37 @@ class Users extends Component {
                   <ModalForm id="createUser" title="Create New user">
                     <UserForm />
                   </ModalForm>
-                  <table className="table bg-light text-center">
-                    <thead>
-                      <tr className="text-muted">
-                        <th>#</th>
-                        <td>Username</td>
-                        <td>First Name</td>
-                        <td>Last Name</td>
-                        <td>Role</td>
-                        <td>Edit</td>
-                        <td>Remove</td>
-                      </tr>
-
-                      {this.props.users.map((user, index) => (
-                        <tr key={index}>
-                          <th>{index + 1}</th>
-                          <td>{user.username}</td>
-                          <td>{user.first_name}</td>
-                          <td>{user.last_name}</td>
-                          <td>{user.role}</td>
-                          <td>
-                            <button className="btn btn-info btn-sm">Edit</button>
-                          </td>
-                          <td>
-                            <button className="btn btn-danger btn-sm">Delete</button>
-                          </td>
+                  <div className="table-responsive">
+                    <table className="table table bg-light text-center">
+                      <thead>
+                        <tr className="text-muted">
+                          <th>#</th>
+                          <td>Username</td>
+                          <td>First Name</td>
+                          <td>Last Name</td>
+                          <td>Role</td>
+                          <td>Edit</td>
+                          <td>Remove</td>
                         </tr>
-                      ))}
-                    </thead>
-                  </table>
+
+                        {this.props.users.map((user, index) => (
+                          <tr key={index}>
+                            <th>{index + 1}</th>
+                            <td>{user.username}</td>
+                            <td>{user.first_name}</td>
+                            <td>{user.last_name}</td>
+                            <td>{user.role}</td>
+                            <td>
+                              <button className="btn btn-info btn-sm">Edit</button>
+                            </td>
+                            <td>
+                              <button className="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                          </tr>
+                        ))}
+                      </thead>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,4 +89,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Users));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UsersTable));

@@ -15,6 +15,8 @@ class Dashboard extends Component {
     const { history } = this.props;
     this.props.fetchUserData(history);
     this.props.setActive('dashboard');
+
+    this.startTime = new Date();
   }
 
   render() {
@@ -38,28 +40,28 @@ class Dashboard extends Component {
                         iconStyle="text-warning"
                         title="Projects"
                         count={`${this.props.user.projects.length}`}
-                        updated="2020-02-15"
+                        updated={`${this.startTime.toLocaleTimeString()}`}
                       />
                       <DashboardCard
                         icon="fa-tasks"
                         iconStyle="text-success"
                         title="Tasks"
                         count={`${this.props.user.assignedTasks.length}`}
-                        updated="2020-02-15"
+                        updated={`${this.startTime.toLocaleTimeString()}`}
                       />
                       <DashboardCard
                         icon="fa-comment"
                         iconStyle="text-info"
                         title="Comments"
                         count={`${this.props.user.comments.length}`}
-                        updated="2020-02-15"
+                        updated={`${this.startTime.toLocaleTimeString()}`}
                       />
                       <DashboardCard
                         icon="fa-tag"
                         iconStyle="text-danger"
                         title="Tagged tasks"
                         count={`${this.props.user.tasks.length}`}
-                        updated="2020-02-15"
+                        updated={`${this.startTime.toLocaleTimeString()}`}
                       />
                     </div>
                   </div>
