@@ -16,7 +16,7 @@ function Projects() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (active !== 'tasks') {
+    if (active !== 'projects') {
       dispatch(uiActions.setActive('projects'));
     }
   }, [active, dispatch]);

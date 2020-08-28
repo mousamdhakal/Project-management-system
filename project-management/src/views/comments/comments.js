@@ -14,7 +14,7 @@ function Comments() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (active !== 'tasks') {
+    if (active !== 'comments') {
       dispatch(uiActions.setActive('comments'));
     }
   }, [active, dispatch]);
