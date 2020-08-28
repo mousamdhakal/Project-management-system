@@ -13,8 +13,13 @@ const schema = Joi.object({
   task: Joi.string().max(90).required(),
 });
 
+// Validation schema
+const updateSchema = Joi.object({
+  text: Joi.string().max(500).required(),
+});
+
 /**
- * Validate create/update task request.
+ * Validate create comment request.
  *
  * @param   {Object}   req
  * @param   {Object}   res
@@ -23,6 +28,20 @@ const schema = Joi.object({
  */
 function commentValidator(req, res, next) {
   return validate(req.body, schema)
+    .then(() => next())
+    .catch((err) => next(err));
+}
+
+/**
+ * Validate update comment request.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
+function updateValidator(req, res, next) {
+  return validate(req.body, updateSchema)
     .then(() => next())
     .catch((err) => next(err));
 }
@@ -75,4 +94,4 @@ function validateProjectInvolvement(req, res, next) {
     .catch((err) => next(Boom.notFound('Task being commented on does not exists')));
 }
 
-module.exports = { commentValidator, validateCommentOwnership, validateProjectInvolvement };
+module.exports = { commentValidator, updateValidator, validateCommentOwnership, validateProjectInvolvement };

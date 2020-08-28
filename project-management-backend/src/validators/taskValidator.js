@@ -12,7 +12,7 @@ const roles = require('../utils/roles');
 const schema = Joi.object({
   title: Joi.string().max(90).required(),
   description: Joi.string().max(500),
-  assigned_user: Joi.string().max(90).required(),
+  assigned_user: Joi.string().max(90),
   previously_assigned_user: Joi.string().max(90),
   associated_project: Joi.string().max(90).required(),
   deadline: Joi.date(),

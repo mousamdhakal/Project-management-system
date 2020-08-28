@@ -10,12 +10,19 @@ const roles = require('../utils/roles');
 const schema = Joi.object({
   title: Joi.string().max(90).required(),
   description: Joi.string().max(500).required(),
+  project_manager: Joi.string().max(90).required(),
+  users: Joi.array().required(),
+});
+
+const updateSchema = Joi.object({
+  title: Joi.string().max(90),
+  description: Joi.string().max(500),
   project_manager: Joi.string().max(90),
   users: Joi.array(),
 });
 
 /**
- * Validate create/update project request.
+ * Validate create project request.
  *
  * @param   {Object}   req
  * @param   {Object}   res
@@ -24,6 +31,20 @@ const schema = Joi.object({
  */
 function projectValidator(req, res, next) {
   return validate(req.body, schema)
+    .then(() => next())
+    .catch((err) => next(err));
+}
+
+/**
+ * Validate update project request.
+ *
+ * @param   {Object}   req
+ * @param   {Object}   res
+ * @param   {Function} next
+ * @returns {Promise}
+ */
+function updateValidator(req, res, next) {
+  return validate(req.body, updateSchema)
     .then(() => next())
     .catch((err) => next(err));
 }
@@ -102,4 +123,4 @@ function involvementChecker(req, res, next) {
     .catch((err) => next(err));
 }
 
-module.exports = { findProject, projectAuthorizer, projectValidator, involvementChecker };
+module.exports = { findProject, projectAuthorizer, projectValidator, updateValidator, involvementChecker };

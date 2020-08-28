@@ -8,7 +8,7 @@ const {
   update,
   remove,
 } = require('../controllers/projectController');
-const { projectAuthorizer, findProject, projectValidator } = require('../validators/projectValidator');
+const { projectAuthorizer, projectValidator, updateValidator } = require('../validators/projectValidator');
 
 const authorize = require('../middlewares/authorize');
 const roles = require('../utils/roles');
@@ -38,7 +38,7 @@ router.post('/', authorize([roles[0]]), projectValidator, create);
 /**
  * PUT /api/projects/:id
  */
-router.put('/:id', authorize([roles[0], roles[1]]), projectAuthorizer, projectValidator, update);
+router.put('/:id', authorize([roles[0], roles[1]]), projectAuthorizer, updateValidator, update);
 
 /**
  * DELETE /api/projects/:id

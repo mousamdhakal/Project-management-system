@@ -5,11 +5,11 @@ const {
   commentValidator,
   validateCommentOwnership,
   validateProjectInvolvement,
+  updateValidator,
 } = require('../validators/commentValidator');
 
 const authorize = require('../middlewares/authorize');
 const roles = require('../utils/roles');
-const { valid } = require('@hapi/joi');
 
 const router = Router();
 
@@ -46,7 +46,7 @@ router.put(
   '/:id',
   authorize([roles[0], roles[1], roles[2], roles[3]]),
   validateCommentOwnership,
-  commentValidator,
+  updateValidator,
   update
 );
 
